@@ -20,21 +20,20 @@ namespace FortunesFromTheScrapyard.Items
         [FormatToken(TOKEN, 0)]
         public static float procChanceBase = 15f;
 
-        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 30f, configDescOverride = "Debuff duration in seconds. Scales with proc coefficient; new applications refresh shorter existing stacks.")]
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 30f, configDescOverride = "Debuff duration in seconds. Scales with proc coefficient; reapplications refresh the single debuff without shortening its remaining duration.")]
         [FormatToken(TOKEN, 1)]
         public static float buffDuration = 3f;
 
-        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 1f, configDescOverride = "Fraction of the victim's maximum health added permanently to its execute threshold per second, per active debuff stack. 0.01 is 1%.")]
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 1f, configDescOverride = "Fraction of the victim's maximum health added permanently to its execute threshold per second while injected. The full buildup rate is multiplied by one plus the number of other unique active DOT types. 0.01 is 1%.")]
         [FormatToken(TOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 2)]
         public static float executePercentPerSecond = 0.01f;
 
-        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 1f, configDescOverride = "Additional fraction of maximum health added to execute buildup per second, per active debuff stack, for each extra item held by its applier. 0.005 is 0.5%.")]
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 1f, configDescOverride = "Additional fraction of maximum health added to execute buildup per second for each extra item held by the latest applier, before unique DOT scaling. 0.005 is 0.5%.")]
         [FormatToken(TOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 3)]
         public static float executePercentPerSecondStack = 0.005f;
 
-        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 1f, 5f, configDescOverride = "Damage multiplier for all damage over time against enemies with an active Lethal Injection debuff. Does not multiply again for additional item or debuff stacks.")]
         [FormatToken(TOKEN, 4)]
-        public static float dotDamageMultiplier = 1.5f;
+        private const float legacyDotDamageMultiplier = 1f;
 
         public static GameObject lethalInjectionPrefab;
         private static GameObject injectionTrackerPrefab;
@@ -43,14 +42,13 @@ namespace FortunesFromTheScrapyard.Items
         public override void Initialize()
         {
             lethalInjectionPrefab = assetCollection.FindAsset<GameObject>("LethalInjectionPrefab");
-            assetCollection.FindAsset<BuffDef>("bdLethalInjection").canStack = true;
+            assetCollection.FindAsset<BuffDef>("bdLethalInjection").canStack = false;
 
             injectionTrackerPrefab = PrefabAPI.CreateEmptyPrefab("LethalInjectionTracker", true);
             injectionTrackerPrefab.AddComponent<NetworkedBodyAttachment>().forceHostAuthority = true;
             injectionTrackerPrefab.AddComponent<LethalInjectionTracker>();
 
             On.RoR2.CharacterBody.UpdateBuffs += CharacterBody_UpdateBuffs;
-            On.RoR2.HealthComponent.TakeDamageProcess += HealthComponent_TakeDamageProcess;
             ExecuteAPI.CalculateExecuteThreshold += CalculateExecuteThreshold;
             GlobalEventManager.onServerCharacterExecuted += OnServerCharacterExecuted;
         }
@@ -76,16 +74,6 @@ namespace FortunesFromTheScrapyard.Items
             {
                 highestExecuteThreshold = Mathf.Max(highestExecuteThreshold, GetExecuteFraction(victimBody.healthComponent));
             }
-        }
-
-        private static void HealthComponent_TakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
-        {
-            if (NetworkServer.active && self.body && self.body.HasBuff(FFTSContent.Buffs.bdLethalInjection) &&
-                (damageInfo.dotIndex != DotController.DotIndex.None || (damageInfo.damageType.damageType & DamageType.DoT) != 0))
-            {
-                damageInfo.damage *= dotDamageMultiplier;
-            }
-            orig(self, damageInfo);
         }
 
         internal static float GetExecuteFraction(HealthComponent healthComponent)
@@ -143,21 +131,21 @@ namespace FortunesFromTheScrapyard.Items
                 }
 
                 BuffDef debuff = FFTSContent.Buffs.bdLethalInjection;
-                int previousStacks = victimBody.GetBuffCount(debuff);
-                int timedBuffIndex = victimBody.timedBuffs.Count;
                 float duration = buffDuration * damageInfo.procCoefficient;
                 victimBody.AddTimedBuff(debuff, duration);
-                if (victimBody.GetBuffCount(debuff) <= previousStacks)
-                {
-                    return;
-                }
 
+                CharacterBody.TimedBuff injectionBuff = null;
                 foreach (CharacterBody.TimedBuff timedBuff in victimBody.timedBuffs)
                 {
-                    if (timedBuff.buffIndex == debuff.buffIndex && timedBuff.timer < duration)
+                    if (timedBuff.buffIndex == debuff.buffIndex)
                     {
-                        timedBuff.timer = duration;
+                        injectionBuff = timedBuff;
+                        break;
                     }
+                }
+                if (injectionBuff == null || !victimBody.HasBuff(debuff))
+                {
+                    return;
                 }
 
                 if (!injections.TryGetValue(victimBody, out var injection))
@@ -166,7 +154,7 @@ namespace FortunesFromTheScrapyard.Items
                     injection = tracker.GetComponent<LethalInjectionTracker>();
                     tracker.GetComponent<NetworkedBodyAttachment>().AttachToGameObjectAndSpawn(victimBody.gameObject);
                 }
-                injection.AddInjectionStack(victimBody.timedBuffs[timedBuffIndex],
+                injection.ApplyInjection(injectionBuff,
                     GetStackValue(executePercentPerSecond, executePercentPerSecondStack, stack));
                 injection.attackerObject = damageInfo.attacker;
 
@@ -182,21 +170,10 @@ namespace FortunesFromTheScrapyard.Items
     public class LethalInjectionTracker : NetworkBehaviour, INetworkedBodyAttachmentListener
     {
         private CharacterBody hostBody;
-        private readonly List<InjectionStack> activeInjections = new List<InjectionStack>();
-        private readonly HashSet<CharacterBody.TimedBuff> activeTimedBuffs = new HashSet<CharacterBody.TimedBuff>();
+        private CharacterBody.TimedBuff activeInjection;
+        private float executeRate;
+        private readonly HashSet<DotController.DotIndex> activeDotTypes = new HashSet<DotController.DotIndex>();
         internal GameObject attackerObject;
-
-        private readonly struct InjectionStack
-        {
-            public readonly CharacterBody.TimedBuff buff;
-            public readonly float executeRate;
-
-            public InjectionStack(CharacterBody.TimedBuff buff, float executeRate)
-            {
-                this.buff = buff;
-                this.executeRate = executeRate;
-            }
-        }
 
         [SyncVar]
         public float injectionExecuteThreshold;
@@ -207,9 +184,10 @@ namespace FortunesFromTheScrapyard.Items
             LethalInjection.injections.Add(hostBody, this);
         }
 
-        internal void AddInjectionStack(CharacterBody.TimedBuff buff, float executeRate)
+        internal void ApplyInjection(CharacterBody.TimedBuff buff, float executeRate)
         {
-            activeInjections.Add(new InjectionStack(buff, executeRate));
+            activeInjection = buff;
+            this.executeRate = executeRate;
         }
 
         public void UpdateExecuteThreshold(float deltaTime)
@@ -220,23 +198,34 @@ namespace FortunesFromTheScrapyard.Items
                 return;
             }
 
-            activeTimedBuffs.Clear();
-            activeTimedBuffs.UnionWith(hostBody.timedBuffs);
-            float executeGrowth = 0f;
-            for (int i = activeInjections.Count - 1; i >= 0; i--)
+            if (activeInjection != null)
             {
-                InjectionStack injection = activeInjections[i];
-                if (!activeTimedBuffs.Contains(injection.buff) || injection.buff.buffIndex != FFTSContent.Buffs.bdLethalInjection.buffIndex)
+                if (!hostBody.HasBuff(FFTSContent.Buffs.bdLethalInjection) ||
+                    !hostBody.timedBuffs.Contains(activeInjection) ||
+                    activeInjection.buffIndex != FFTSContent.Buffs.bdLethalInjection.buffIndex)
                 {
-                    activeInjections.RemoveAt(i);
-                    continue;
+                    activeInjection = null;
                 }
+                else
+                {
+                    activeDotTypes.Clear();
+                    DotController dotController = DotController.FindDotController(hostBody.gameObject);
+                    if (dotController)
+                    {
+                        foreach (DotController.DotStack dotStack in dotController.dotStackList)
+                        {
+                            if (dotStack.dotIndex != DotController.DotIndex.None && dotStack.timer > 0f)
+                            {
+                                activeDotTypes.Add(dotStack.dotIndex);
+                            }
+                        }
+                    }
 
-                executeGrowth += injection.executeRate * Mathf.Clamp(injection.buff.timer, 0f, deltaTime);
-                if (injection.buff.timer <= deltaTime)
-                    activeInjections.RemoveAt(i);
+                    injectionExecuteThreshold += executeRate * (1 + activeDotTypes.Count) * Mathf.Clamp(activeInjection.timer, 0f, deltaTime);
+                    if (activeInjection.timer <= deltaTime)
+                        activeInjection = null;
+                }
             }
-            injectionExecuteThreshold += executeGrowth;
 
             float executeFraction = LethalInjection.GetExecuteFraction(healthComponent);
             if (executeFraction > 0f && healthComponent.combinedHealthFraction <= executeFraction &&
@@ -244,7 +233,6 @@ namespace FortunesFromTheScrapyard.Items
                 !hostBody.HasBuff(RoR2Content.Buffs.HiddenInvincibility) && !hostBody.HasBuff(RoR2Content.Buffs.Immune) &&
                 !hostBody.HasBuff(DLC2Content.Buffs.SoulSurge))
             {
-                // ExecuteAPI checks damage reports, so a zero-damage hit also checks buildup between attacks.
                 healthComponent.TakeDamage(new DamageInfo
                 {
                     attacker = attackerObject,

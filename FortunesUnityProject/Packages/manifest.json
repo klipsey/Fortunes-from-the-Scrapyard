@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.passivepicasso.thunderkit": "https://github.com/PassivePicasso/ThunderKit.git#9.1.6",
+    "com.passivepicasso.thunderkit": "file:com.passivepicasso.thunderkit",
     "com.unity.assetbundlebrowser": "https://github.com/Unity-Technologies/AssetBundles-Browser.git",
     "com.unity.burst": "1.8.18",
     "com.unity.collections": "1.5.1",

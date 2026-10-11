@@ -7,19 +7,19 @@ using RoR2;
 using RoR2.UI;
 using UnityEngine;
 using UnityEngine.Networking;
-using CloakerContent = FortunesFromTheScrapyard.Survivors.Cloaker.Cloaker;
+using CloakerContent = FortunesFromTheScrapyard.Survivors.Cloaker.CloakerSurvivor;
 
 namespace EntityStates.Cloaker.Weapon
 {
     public class CloakerChargeShot : BaseSkillState
     {
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Fully charged shot damage coefficient. 4 deals 400% damage.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Fully charged shot damage coefficient. 5 deals 500% damage.")]
         [FormatToken(CloakerContent.SECONDARYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
-        public static float MaxDamageCoefficient = 4f;
+        public static float MaxDamageCoefficient = 5f;
 
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 10f, configDescOverride = "Full charge time in seconds before attack speed scaling.")]
         [FormatToken(CloakerContent.SECONDARYTOKEN, 1)]
-        public static float BaseDuration = 1.5f;
+        public static float BaseDuration = 1f;
 
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Minimum seconds before releasing a partially charged shot. A full charge can fire sooner.")]
         public static float MinimumChargeDuration = 0.5f;
@@ -35,10 +35,10 @@ namespace EntityStates.Cloaker.Weapon
             if (captureStealthDamage && characterBody.statsDirty)
                 characterBody.RecalculateStats();
             base.OnEnter();
-            if (captureStealthDamage)
-                cloakedDamage = damageStat;
-            duration = BaseDuration / attackSpeedStat;
             controller = GetComponent<CloakerController>();
+            if (captureStealthDamage)
+                cloakedDamage = controller.GetStealthAttackDamage(damageStat);
+            duration = BaseDuration / attackSpeedStat;
             controller.BreakStealth();
             PlayCrossfade("Gesture, Override", controller.GetAnimationStateName("Gesture, Override", "EnterSecondary"),
                 "Secondary.playbackRate", duration, duration * 0.05f);

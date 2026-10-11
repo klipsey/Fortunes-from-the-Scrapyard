@@ -2,8 +2,6 @@
 using ThunderKit.Addressable.Tools;
 using ThunderKit.Core.Data;
 using UnityEditor;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Rendering;
 
 namespace Fortunes.Editor
@@ -25,9 +23,13 @@ namespace Fortunes.Editor
                 ReleaseShader(settings.CustomDeferredReflection, BuiltinShaderType.DeferredReflections);
                 ReleaseShader(settings.CustomDeferredScreenspaceShadows, BuiltinShaderType.ScreenSpaceShadows);
             }
+            else if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                RestoreShaders();
+            }
             else if (state == PlayModeStateChange.EnteredEditMode)
             {
-                EditorApplication.delayCall += RestoreShaders;
+                EditorApplication.delayCall += RestoreEditModeShaders;
             }
         }
 
@@ -36,20 +38,21 @@ namespace Fortunes.Editor
             if (string.IsNullOrEmpty(address) || GraphicsSettings.GetShaderMode(type) != BuiltinShaderMode.UseCustom)
                 return;
 
-            Shader shader = GraphicsSettings.GetCustomShader(type);
-            GraphicsSettings.SetCustomShader(type, null);
-            GraphicsSettings.SetShaderMode(type, BuiltinShaderMode.UseBuiltin);
-
-            // Release ThunderKit's load before Unity destroys the shader, avoiding a stale cached result.
-            if (shader)
-                Addressables.Release(shader);
+            AddressableGraphicsSettings.UnsetShader(address, type);
         }
 
-        private static void RestoreShaders()
+        private static void RestoreEditModeShaders()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
+            AddressableGraphicsSettings.ReloadAddressables();
+            SceneView.RepaintAll();
+            EditorApplication.QueuePlayerLoopUpdate();
+        }
+
+        private static void RestoreShaders()
+        {
             var settings = ThunderKitSetting.GetOrCreateSettings<AddressableGraphicsSettings>();
             AddressableGraphicsSettings.SetShader(settings.CustomDeferredShading, BuiltinShaderType.DeferredShading);
             AddressableGraphicsSettings.SetShader(settings.CustomDeferredReflection, BuiltinShaderType.DeferredReflections);

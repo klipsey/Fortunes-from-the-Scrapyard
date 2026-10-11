@@ -7,13 +7,12 @@
       "dependencies": {}
     },
     "com.passivepicasso.thunderkit": {
-      "version": "https://github.com/PassivePicasso/ThunderKit.git#9.1.6",
+      "version": "file:com.passivepicasso.thunderkit",
       "depth": 0,
-      "source": "git",
+      "source": "embedded",
       "dependencies": {
         "com.unity.scriptablebuildpipeline": "1.16.1"
-      },
-      "hash": "b3aaf6c979fe2794753c6e1c5de30ea7ec8552f5"
+      }
     },
     "com.unity.assetbundlebrowser": {
       "version": "https://github.com/Unity-Technologies/AssetBundles-Browser.git",

@@ -40,6 +40,18 @@ namespace FortunesFromTheScrapyard.Elite
 
         public override void Initialize()
         {
+            foreach (EliteDef eliteDef in eliteDefs)
+            {
+                if (!(eliteDef is ExtendedEliteDef extendedElite) || !extendedElite.overlayMaterial)
+                    throw new InvalidOperationException("Scrap elite requires an ExtendedEliteDef with a hologram overlay material.");
+                Material overlay = extendedElite.overlayMaterial;
+                if (!overlay.shader || overlay.shader.name.StartsWith("Stubbed", StringComparison.Ordinal))
+                    throw new InvalidOperationException("Scrap elite's overlay shader was not resolved by the shared shader loader.");
+                overlay.EnableKeyword("CLOUDOFFSET");
+                overlay.EnableKeyword("FRESNEL");
+                overlay.EnableKeyword("USE_CLOUDS");
+            }
+
             ScrapAffixEffect = assetCollection.FindAsset<GameObject>("ScrapAffixEffect");
 
             ScrapPulseEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/Railgunner/RailgunnerMine.prefab").WaitForCompletion().gameObject.transform.Find("PrepEffect").gameObject.InstantiateClone("ScrapPulseEffect");

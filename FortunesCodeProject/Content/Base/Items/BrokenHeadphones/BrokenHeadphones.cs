@@ -46,10 +46,14 @@ namespace FortunesFromTheScrapyard.Items
 
             headphonesVisualEffect = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercExposeEffect.prefab").WaitForCompletion().InstantiateClone("BrokenHeadphonesVisualEffect", false);
 
-            //Needs better texture
-            headphonesVisualEffect.transform.Find("Visual, On").Find("PulseEffect, Ring").gameObject.GetComponent<ParticleSystemRenderer>().material.SetTexture("_MainTex", assetCollection.FindAsset<Texture>("texSwirl"));
-            headphonesVisualEffect.transform.Find("Visual, On").Find("PulseEffect, Ring").gameObject.GetComponent<ParticleSystemRenderer>().material.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampHook.png").WaitForCompletion());
-            headphonesVisualEffect.transform.Find("Visual, On").Find("PulseEffect, Ring").gameObject.GetComponent<ParticleSystemRenderer>().material.SetFloat("_AlphaBoost", 20);
+            Texture2D swirlTexture = FFTSAssets.LoadAsset<Texture2D>("texSwirl", FFTSBundle.Items);
+            if (!swirlTexture)
+                throw new System.InvalidOperationException("Broken Headphones' ready effect texture 'texSwirl' is missing from the items bundle.");
+
+            Material ringMaterial = headphonesVisualEffect.transform.Find("Visual, On").Find("PulseEffect, Ring").GetComponent<ParticleSystemRenderer>().material;
+            ringMaterial.SetTexture("_MainTex", swirlTexture);
+            ringMaterial.SetTexture("_RemapTex", Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampHook.png").WaitForCompletion());
+            ringMaterial.SetFloat("_AlphaBoost", 20);
 
             bool tempAdd(CharacterBody body) => body.HasBuff(FFTSContent.Buffs.bdBrokenHeadphonesDisorient);
             TempVisualEffectAPI.AddTemporaryVisualEffect(headphonesVisualEffect, tempAdd);

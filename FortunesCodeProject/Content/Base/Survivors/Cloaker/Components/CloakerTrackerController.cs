@@ -8,7 +8,8 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
     public class CloakerTrackerController : MonoBehaviour
     {
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 200f, configDescOverride = "Maximum Mark targeting distance in meters.")]
-        [FormatToken(Cloaker.MARKTOKEN, 0)]
+        [FormatToken(CloakerSurvivor.MARKTOKEN, 0)]
+        [FormatToken(CloakerSurvivor.MARKKEYWORDTOKEN, 0)]
         public static float MaxTrackingDistance = 40f;
 
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 180f, configDescOverride = "Maximum Mark targeting angle in degrees.")]
@@ -58,7 +59,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
                 ClearTracking();
                 return false;
             }
-            indicator.active = true;
+            indicator.active = special.stock >= markSkillDef.requiredStock;
             return true;
         }
 
@@ -90,7 +91,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             CharacterBody other = candidate.healthComponent.body;
             return other && other != body && other.teamComponent
                 && TeamMask.GetUnprotectedTeams(body.teamComponent.teamIndex).HasTeam(other.teamComponent.teamIndex)
-                && !other.HasBuff(FFTSContent.Buffs.bdCloakerMarked) && !other.HasBuff(FFTSContent.Buffs.bdCloakerMarkCd)
+                && !other.HasBuff(FFTSContent.Buffs.bdCloakerMarked)
                 && (candidate.transform.position - input.aimOrigin).sqrMagnitude <= MaxTrackingDistance * MaxTrackingDistance;
         }
 

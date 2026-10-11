@@ -39,19 +39,6 @@ namespace FortunesFromTheScrapyard
             }
 
             NetworkingAPI.RegisterMessageType<SyncRoughReceptionSwing>();
-            On.RoR2.CharacterBody.OnSkillActivated += CharacterBody_OnSkillActivated;
-        }
-
-        private void CharacterBody_OnSkillActivated(On.RoR2.CharacterBody.orig_OnSkillActivated orig, CharacterBody self, GenericSkill skill)
-        {
-            orig.Invoke(self, skill);
-
-            if (NetworkServer.active && self.HasItem(FFTSContent.Items.RoughReception) && self.skillLocator && skill == self.skillLocator.primary)
-            {
-                RoughReceptionComponent swingComponent = self.gameObject.EnsureComponent<RoughReceptionComponent>();
-                swingComponent.enabled = true;
-                swingComponent.RoughReceptionSwing(self);
-            }
         }
 
         private static void PlaySwing(CharacterBody body, float duration, int step)
@@ -83,7 +70,6 @@ namespace FortunesFromTheScrapyard
 
         public class RoughReceptionDisplay : MonoBehaviour
         {
-            // The forward claw stroke spans frames 7-12 of each 20-frame swing.
             private const float swipeStart = 0.35f;
             private const float swipeEnd = 0.6f;
             private Animator animator;
@@ -174,10 +160,21 @@ namespace FortunesFromTheScrapyard
             {
                 swingComponent = body.gameObject.EnsureComponent<RoughReceptionComponent>();
                 swingComponent.enabled = true;
+                body.onSkillActivatedServer += OnSkillActivated;
             }
             private void OnDisable()
             {
+                if (body) body.onSkillActivatedServer -= OnSkillActivated;
                 if (swingComponent) swingComponent.enabled = false;
+            }
+
+            private void OnSkillActivated(GenericSkill skill)
+            {
+                if (body.skillLocator && skill == body.skillLocator.primary && body.HasItem(FFTSContent.Items.RoughReception))
+                {
+                    swingComponent.enabled = true;
+                    swingComponent.RoughReceptionSwing(body);
+                }
             }
         }
         public class RoughReceptionComponent : MonoBehaviour

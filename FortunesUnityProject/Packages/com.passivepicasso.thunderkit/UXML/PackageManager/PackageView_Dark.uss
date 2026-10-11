@@ -1,0 +1,11 @@
+﻿#tkpm-package-view-controls{
+	position: absolute;
+	right: 0px;
+}
+#tkpm-package-install-button {
+	border-right-width: 0px;
+}
+
+.tag {
+	background-color: #444;
+}

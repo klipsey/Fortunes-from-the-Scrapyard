@@ -282,6 +282,11 @@
 									</ReferenceList>
 									<ChildrenList>
 										<AudioFileSource Name="sfx_lunarmoney_start" ID="{386DE7BC-472D-46D4-9106-FFBAD6B6F615}">
+											<PropertyList>
+												<Property Name="LoopBegin" Type="Real64" Value="0.394425910879574"/>
+												<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+												<Property Name="TrimBegin" Type="Real64" Value="0.394425910879574"/>
+											</PropertyList>
 											<Language>SFX</Language>
 											<AudioFile>sfx_lunarmoney_start.wav</AudioFile>
 											<MediaIDList>

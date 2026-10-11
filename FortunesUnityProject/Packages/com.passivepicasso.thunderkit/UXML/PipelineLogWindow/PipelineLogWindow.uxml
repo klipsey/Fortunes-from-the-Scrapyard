@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xmlns:upm="UnityEditor.PackageManager.UI"
+xsi:noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd"
+xsi:schemaLocation="
+                        UnityEngine.Experimental.UIElements ../../../../../../UIElementsSchema/UnityEngine.Experimental.UIElements.xsd
+                        UnityEditor.Experimental.UIElements ../../../../../../UIElementsSchema/UnityEditor.Experimental.UIElements.xsd
+                        UnityEditor.PackageManager.UI ../../../../../../UIElementsSchema/UnityEditor.PackageManager.UI.xsd
+">
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement class="unity-toolbar">
+            <ui:VisualElement class="name-section">
+                <ui:Label text="Name:" />
+                <ui:Label name="name-label" />
+            </ui:VisualElement>
+            <ui:VisualElement class="date-section">
+                <ui:Label text="Created:" />
+                <ui:Label name="created-date-label" />
+            </ui:VisualElement>
+
+            <ui:Button name="error-filter-button" class="filter-button b1 w24h24" >
+                <ui:VisualElement class="error-icon-sml w16h16"/>
+            </ui:Button>
+
+            <ui:Button name="warning-filter-button" class="filter-button b1 w24h24 " >
+                <ui:VisualElement class="warning-icon-sml w16h16"/>
+            </ui:Button>
+            
+            <ui:Button name="information-filter-button" class="filter-button b1 w24h24 " >
+                <ui:VisualElement class="information-icon-sml w16h16"/>
+            </ui:Button>
+
+            <ui:Button name="verbose-filter-button" class="filter-button b1 w24h24 " >
+                <ui:VisualElement class="verbose-icon-sml w16h16"/>
+            </ui:Button>
+
+            <ui:Label text="Supporting the right for women to have bodily autonomy" style="position:absolute; right:0px; font-size:10px;"/>
+
+        </ui:VisualElement>
+        <ui:ListView focusable="true" name="logentry-list-view" item-height="40" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

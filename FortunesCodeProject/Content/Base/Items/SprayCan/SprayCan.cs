@@ -60,7 +60,7 @@ namespace FortunesFromTheScrapyard.Items
         private void TransformSprayCans(int count, CharacterMaster master)
         {
             Inventory inv = master.inventory;
-            inv.RemoveItem(FFTSContent.Items.SprayCanConsumed, count);
+            inv.RemoveItemPermanent(FFTSContent.Items.SprayCanConsumed, count);
             inv.GiveItem(FFTSContent.Items.SprayCan, count);
 
             CharacterMasterNotificationQueue.SendTransformNotification(
@@ -145,7 +145,7 @@ namespace FortunesFromTheScrapyard.Items
                 wasConsumed = true;
                 if (uses <= maxUses - baseUses)
                 {
-                    body.inventory.RemoveItem(GetItemDef());
+                    body.inventory.RemoveItemPermanent(GetItemDef());
                     body.inventory.GiveItem(FFTSContent.Items.SprayCanConsumed);
 
                     if (body.master)

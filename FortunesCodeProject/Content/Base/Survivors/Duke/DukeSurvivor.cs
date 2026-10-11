@@ -401,7 +401,7 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
 
                         if (!damageInfo.HasModdedDamageType(DukeRicochet))
                         {
-                            RicochetOrb orb = new RicochetOrb
+                            FortunesFromTheScrapyard.Ricochet.RicochetOrb orb = new FortunesFromTheScrapyard.Ricochet.RicochetOrb
                             {
                                 originalPosition = damageInfo.position,
                                 origin = damageInfo.position,
@@ -442,7 +442,7 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
                     hitObject.transform.root.gameObject.TryGetComponent<BuffWard>(out var buffWard) &&
                     buffWard && buffWard.buffDef == FFTSContent.Buffs.bdDukeDamageShare)
                 {
-                    RicochetOrb orb = new RicochetOrb
+                    FortunesFromTheScrapyard.Ricochet.RicochetOrb orb = new FortunesFromTheScrapyard.Ricochet.RicochetOrb
                     {
                         originalPosition = hitObject.transform.position,
                         origin = hitObject.transform.position,

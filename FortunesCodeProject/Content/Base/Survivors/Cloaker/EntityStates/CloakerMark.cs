@@ -27,7 +27,7 @@ namespace EntityStates.Cloaker
             }
             StartAimMode(duration);
             string animation = GetComponent<CloakerController>().GetAnimationStateName("Gesture, Override", "Special2");
-            PlayCrossfade("Gesture, Override", animation, "Special.playbackRate", duration, duration * 0.05f);
+            PlayCrossfade("Gesture, Override", animation, "Special.playbackRate", duration, duration * 0.5f);
             Util.PlaySound(CloakerAssets.PingSound, gameObject);
             if (NetworkServer.active && tracker.IsValidTarget(victim))
                 victim.healthComponent.body.AddBuff(FortunesFromTheScrapyard.FFTSContent.Buffs.bdCloakerMarked);

@@ -1,9 +1,11 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MSU;
 using MSU.Config;
 using RoR2;
 using RoR2.ContentManagement;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -15,6 +17,9 @@ namespace FortunesFromTheScrapyard.Items
 
         // BodyFlags.Drone is not named in the project's compile-time game libraries.
         private const CharacterBody.BodyFlags droneBodyFlag = (CharacterBody.BodyFlags)0x400000;
+        private GameObject droneRemnantPrefab;
+        private readonly Dictionary<SummonMasterBehavior, CharacterMaster> dronePurchases =
+            new Dictionary<SummonMasterBehavior, CharacterMaster>();
 
         [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Enable legacy effects on non-drone interactables. Individual shrine, terminal, and minion settings still apply.")]
         public static bool legacyInteractables = false;
@@ -28,7 +33,7 @@ namespace FortunesFromTheScrapyard.Items
         public static bool shrineCombat = false;
         [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Includes printers and shops.")]
         public static bool terminals = true;
-        [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Duplicate purchased drones and gunner turrets. Other summoned minions require Legacy Interactables.")]
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Leave one-use Multitool remnants after purchasing drones and gunner turrets. Other summoned minions require Legacy Interactables.")]
         public static bool minions = true;
 
 
@@ -38,7 +43,14 @@ namespace FortunesFromTheScrapyard.Items
         //public static bool roulette = true;
         public override void Initialize()
         {
+            droneRemnantPrefab = MultitoolDroneRemnant.CreatePrefab();
             FFTSMain.instance.StartCoroutine(FFTSConfig.AfterConfigsBound(InstallHooks));
+        }
+
+        public override void ModifyContentPack(ContentPack contentPack)
+        {
+            base.ModifyContentPack(contentPack);
+            contentPack.networkedObjectPrefabs.AddSingle(droneRemnantPrefab);
         }
 
         private void InstallHooks()
@@ -82,7 +94,11 @@ namespace FortunesFromTheScrapyard.Items
         {
             CharacterMaster result = orig(self, activator);
 
-            if (NetworkServer.active && result && CanDuplicateSummon(self) &&
+            if (NetworkServer.active && result && dronePurchases.ContainsKey(self))
+            {
+                dronePurchases[self] = result;
+            }
+            else if (NetworkServer.active && result && legacyInteractables && !IsDroneSummon(self) &&
                 self.TryGetComponent(out MultitoolComponent mtc) && mtc.VerifyMultitoolAndBreak())
             {
                 orig(self,activator);
@@ -91,12 +107,8 @@ namespace FortunesFromTheScrapyard.Items
             return result;
         }
 
-        private static bool CanDuplicateSummon(SummonMasterBehavior summon)
+        internal static bool IsDroneSummon(SummonMasterBehavior summon)
         {
-            if (!minions)
-                return false;
-            if (legacyInteractables)
-                return true;
             if (!summon.masterPrefab || !summon.masterPrefab.TryGetComponent(out CharacterMaster master) ||
                 !master.bodyPrefab || !master.bodyPrefab.TryGetComponent(out CharacterBody body))
                 return false;
@@ -141,7 +153,7 @@ namespace FortunesFromTheScrapyard.Items
                 {
                     if (mtc.VerifyMultitoolAndBreak())
                     {
-                        PickupDropletController.CreatePickupDroplet(self.pickupIndex,
+                        PickupDropletController.CreatePickupDroplet(self.pickup,
                             (self.dropTransform ? self.dropTransform : self.transform).position,
                             self.transform.TransformVector(self.dropVelocity));
                     }
@@ -149,10 +161,10 @@ namespace FortunesFromTheScrapyard.Items
             }
         }
 
-        private void MultitoolRoulette(On.RoR2.RouletteChestController.orig_EjectPickupServer orig, RouletteChestController self, PickupIndex pickupIndex)
+        private void MultitoolRoulette(On.RoR2.RouletteChestController.orig_EjectPickupServer orig, RouletteChestController self, UniquePickup pickup)
         {
-            orig(self, pickupIndex);
-            if (pickupIndex == PickupIndex.none)
+            orig(self, pickup);
+            if (!pickup.isValid)
             {
                 return;
             }
@@ -163,7 +175,7 @@ namespace FortunesFromTheScrapyard.Items
                 {
                     if (mtc.VerifyMultitoolAndBreak())
                     {
-                        PickupDropletController.CreatePickupDroplet(pickupIndex, self.ejectionTransform.position, self.ejectionTransform.rotation * (self.localEjectionVelocity + new Vector3(-2, 0, 0)));
+                        PickupDropletController.CreatePickupDroplet(pickup, self.ejectionTransform.position, self.ejectionTransform.rotation * (self.localEjectionVelocity + new Vector3(-2, 0, 0)));
                     }
                 }
             }
@@ -178,7 +190,7 @@ namespace FortunesFromTheScrapyard.Items
                 );
             c.Remove();
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Action<PickupIndex, Vector3, Vector3, ShrineChanceBehavior>>((pickupIndex, dropletOrigin, dropletDirection, self) =>
+            c.EmitDelegate<Action<UniquePickup, Vector3, Vector3, ShrineChanceBehavior>>((pickup, dropletOrigin, dropletDirection, self) =>
             {
                 bool multitoolSuccess = false;
                 MultitoolComponent mtc = null;
@@ -195,14 +207,14 @@ namespace FortunesFromTheScrapyard.Items
                         rotation = Quaternion.AngleAxis(angle, Vector3.up);
                         for (int i = 0; i < 2; i++)
                         {
-                            PickupDropletController.CreatePickupDroplet(pickupIndex, dropletOrigin, vector);
+                            PickupDropletController.CreatePickupDroplet(pickup, dropletOrigin, vector);
                             vector = rotation * vector;
                         }
                     }
                 }
                 if (!multitoolSuccess)
                 {
-                    PickupDropletController.CreatePickupDroplet(pickupIndex, dropletOrigin, dropletDirection);
+                    PickupDropletController.CreatePickupDroplet(pickup, dropletOrigin, dropletDirection);
                 }
             });
         }
@@ -266,10 +278,28 @@ namespace FortunesFromTheScrapyard.Items
                 return;
             }
 
-            CharacterBody activatorBody = null;
-            if (NetworkServer.active &&
-                (legacyInteractables || (self.TryGetComponent(out SummonMasterBehavior summon) && CanDuplicateSummon(summon))) &&
-                activator.gameObject.TryGetComponent(out activatorBody) && activatorBody.inventory)
+            if (NetworkServer.active && minions &&
+                self.TryGetComponent(out SummonMasterBehavior summon) && IsDroneSummon(summon))
+            {
+                dronePurchases.Add(summon, null);
+                CharacterMaster purchasedMaster;
+                try
+                {
+                    orig(self, activator);
+                    purchasedMaster = dronePurchases[summon];
+                }
+                finally
+                {
+                    dronePurchases.Remove(summon);
+                }
+
+                if (purchasedMaster)
+                    MultitoolDroneRemnant.Spawn(droneRemnantPrefab, summon, purchasedMaster);
+                return;
+            }
+
+            if (NetworkServer.active && legacyInteractables &&
+                activator.gameObject.TryGetComponent(out CharacterBody activatorBody) && activatorBody.inventory)
             {
                 Inventory inv = activatorBody.inventory;
                 int multitoolCount = inv.GetItemCount(FFTSContent.Items.Multitool);
@@ -284,6 +314,33 @@ namespace FortunesFromTheScrapyard.Items
             }
 
             orig(self, activator);
+        }
+
+        internal static bool HasActiveCharge(CharacterBody body)
+        {
+            return body && body.inventory && body.inventory.GetItemCount(FFTSContent.Items.Multitool) > 0;
+        }
+
+        internal static bool TryConsumeCharge(CharacterBody body)
+        {
+            if (!NetworkServer.active || !HasActiveCharge(body))
+                return false;
+
+            TransformCharge(body, FFTSContent.Items.Multitool, FFTSContent.Items.MultitoolConsumed);
+            return true;
+        }
+
+        internal static void RefundCharge(CharacterBody body)
+        {
+            TransformCharge(body, FFTSContent.Items.MultitoolConsumed, FFTSContent.Items.Multitool);
+        }
+
+        private static void TransformCharge(CharacterBody body, ItemDef from, ItemDef to)
+        {
+            body.inventory.RemoveItemPermanent(from, 1);
+            body.inventory.GiveItem(to, 1);
+            CharacterMasterNotificationQueue.SendTransformNotification(body.master, from.itemIndex, to.itemIndex,
+                CharacterMasterNotificationQueue.TransformationType.Default);
         }
 
         private void TryRegenerateMultitool(On.RoR2.CharacterMaster.orig_OnServerStageBegin orig, RoR2.CharacterMaster self, RoR2.Stage stage)
@@ -301,7 +358,7 @@ namespace FortunesFromTheScrapyard.Items
         private void TransformMultitools(int count, CharacterMaster master)
         {
             Inventory inv = master.inventory;
-            inv.RemoveItem(FFTSContent.Items.MultitoolConsumed, count);
+            inv.RemoveItemPermanent(FFTSContent.Items.MultitoolConsumed, count);
             inv.GiveItem(FFTSContent.Items.Multitool, count);
 
             CharacterMasterNotificationQueue.SendTransformNotification(
@@ -312,40 +369,16 @@ namespace FortunesFromTheScrapyard.Items
     }
     public class MultitoolComponent : MonoBehaviour
     {
-        ItemIndex multitoolIndex => FFTSContent.Items.Multitool.itemIndex;
-        ItemIndex multitoolBrokenIndex => FFTSContent.Items.MultitoolConsumed.itemIndex;
         CharacterBody lastInteractor;
-        Inventory interactorInventory;
 
         public void SetInteractor(CharacterBody interactor, Inventory inv = null)
         {
             lastInteractor = interactor;
-
-            if (inv == null)
-                interactorInventory = interactor.GetComponent<Inventory>();
-            else
-                interactorInventory = inv;
-        }
-
-        bool MultitoolViable()
-        {
-            return interactorInventory.GetItemCount(multitoolIndex) > 0;
-        }
-        void BreakMultitool()
-        {
-            interactorInventory.RemoveItem(multitoolIndex, 1);
-            interactorInventory.GiveItem(multitoolBrokenIndex, 1);
-
-            CharacterMasterNotificationQueue.SendTransformNotification(
-                lastInteractor.master, multitoolIndex,
-                multitoolBrokenIndex,
-                CharacterMasterNotificationQueue.TransformationType.Default);
         }
         public bool VerifyMultitoolAndBreak()
         {
-            if (MultitoolViable())
+            if (Multitool.TryConsumeCharge(lastInteractor))
             {
-                BreakMultitool();
                 DestroyImmediate(this);
                 return true;
             }

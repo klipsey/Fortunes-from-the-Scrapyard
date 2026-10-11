@@ -1,0 +1,42 @@
+﻿#tkpm-package-version {
+	border-color: rgb(128,128,128);
+	height: 22px;
+
+	margin-left: 0px;
+	margin-top: -4px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+
+	padding-left: 4px;
+	padding-top: 4px;
+	padding-right: 4px;
+	padding-bottom: 0px;
+	-unity-text-align: middle-right;
+}
+#tkpm-package-name {
+	flex-grow: 1;
+	padding-left: 4px;
+	padding-top: 0px;
+	padding-right: 4px;
+	padding-bottom: 0px;
+
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+
+	-unity-font-style: normal;
+	overflow: hidden;
+}
+
+#tkpm-package-installed {
+	width: 14px;
+	height: 14px;
+}
+
+.installed {
+	background-image: resource("Builtin Skins/LightSkin/Images/MenuItemOn.png");
+}
+ListView :selected {
+	background-color: rgba(128, 0, 0, 0.5);
+}

@@ -269,6 +269,7 @@ namespace FortunesFromTheScrapyard
             public static BuffDef bdPolypore;
             public static BuffDef bdCloakerMarked;
             public static BuffDef bdCloakerMarkCd;
+            public static BuffDef bdCloakerAkimboSpeed;
             public static BuffDef bdDukeDamageShare;
             public static BuffDef bdDukeSpeedBuff;
             public static BuffDef bdDukeFreeShot;

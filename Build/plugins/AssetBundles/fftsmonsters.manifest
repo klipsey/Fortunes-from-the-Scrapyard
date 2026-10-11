@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2416268992
+CRC: 3731131164
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 405c821e3713f5fb0d5d3b4388fb9346
+    Hash: bbbbf0f61cbdd209028aa50d2a774023
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3816e6382638ce78cefca8132805a956
+    Hash: 428f6a49f24746ddda0d81ebf897d07a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -71,8 +71,6 @@ ClassTypes:
   Script: {fileID: -1067940895, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: -197296741, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-- Class: 114
-  Script: {fileID: 953270592, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: -1277448904, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
@@ -224,5 +222,4 @@ Assets:
 - Assets/FFTSAssets/Monsters/Gardener/matGardenerFur.mat
 - Assets/FFTSAssets/Monsters/Gardener/mcpGardener.asset
 Dependencies:
-- D:/RoR2Mods/Fortunes-from-the-Scrapyard/FortunesUnityProject/AssetBundles/StandaloneWindows/fftsbase
 - D:/RoR2Mods/Fortunes-from-the-Scrapyard/FortunesUnityProject/AssetBundles/StandaloneWindows/fftsmain

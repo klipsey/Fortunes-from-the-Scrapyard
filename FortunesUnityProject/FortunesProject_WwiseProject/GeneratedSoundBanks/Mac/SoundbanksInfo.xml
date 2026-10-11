@@ -25,7 +25,7 @@
 				<GameParameter Id="3673881719" Name="Volume_SFX"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="2023758821" Type="User" Language="SFX" Hash="{147507B6-A22E-7F5F-7A57-EF8A069C9C1A}">
+		<SoundBank Id="2023758821" Type="User" Language="SFX" Hash="{9BCD3873-FAC3-EE6E-3544-F4B6EAB5414C}">
 			<ShortName>FFTSSoundBank</ShortName>
 			<Path>FFTSSoundBank.bnk</Path>
 			<Media>
@@ -91,7 +91,7 @@
 				</File>
 				<File Id="710233405" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>sfx_lunarmoney_start.wav</ShortName>
-					<CachePath>SFX/sfx_lunarmoney_start_818F3B66.wem</CachePath>
+					<CachePath>SFX/sfx_lunarmoney_start_0A366758.wem</CachePath>
 				</File>
 				<File Id="753183646" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>CloakerScream.wav</ShortName>
@@ -220,5 +220,5 @@
 			</GameParameters>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{A696D374-98A9-DCE4-1924-E7CA22AA5D98}</FileHash>
+	<FileHash>{117248D6-F032-0446-4235-58ECAC035FD5}</FileHash>
 </SoundBanksInfo>

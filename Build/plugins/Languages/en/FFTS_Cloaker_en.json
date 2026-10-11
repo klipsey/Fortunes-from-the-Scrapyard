@@ -14,16 +14,18 @@
     "FFTS_CLOAKER_PRIMARY_DESCRIPTION": "Fire a precise bullet for <style=cIsDamage>{0}% damage</style>.",
 
     "FFTS_CLOAKER_SECONDARY_NAME": "Shoot Harder",
-    "FFTS_CLOAKER_SECONDARY_DESCRIPTION": "Charge a shot for up to <style=cIsDamage>{0}% damage</style>. Charging takes <style=cIsUtility>{1} seconds</style>, reduced by attack speed.",
+    "FFTS_CLOAKER_SECONDARY_DESCRIPTION": "Charge a shot for up to <style=cIsDamage>{0}% damage</style>. Charging takes <style=cIsUtility>{1} seconds</style>.",
 
     "FFTS_CLOAKER_UTILITY_NAME": "Restealth",
-    "FFTS_CLOAKER_UTILITY_DESCRIPTION": "Dash in your movement direction, becoming <style=cIsUtility>invincible for {0} seconds</style>. With Cloak, enter stealth and ignore damage and proximity reveals for <style=cIsUtility>{1} seconds</style>.",
+    "FFTS_CLOAKER_UTILITY_DESCRIPTION": "Dash in your movement direction. With Cloak, enter stealth. With Akimbo, gain <style=cIsDamage>{2}% attack speed</style> for <style=cIsUtility>{3} seconds</style>.",
 
-    "FFTS_CLOAKER_SPECIAL_NAME": "Mark",
-    "FFTS_CLOAKER_SPECIAL_DESCRIPTION": "Mark a target within <style=cIsUtility>{0}m</style>. The next hit is a <style=cIsDamage>guaranteed critical strike</style>, or deals <style=cIsDamage>{1}% more damage</style> if it already crits. Consumed marks cannot be reapplied for <style=cIsUtility>{2} seconds</style>.",
+    "FFTS_CLOAKER_SPECIAL_NAME": "Target",
+    "FFTS_CLOAKER_SPECIAL_DESCRIPTION": "Mark a target within <style=cIsUtility>{0}m</style>, revealing it through walls. Hits dealing <style=cIsDamage>{3}% damage</style> consumes the mark and deals <style=cIsDamage>{1}x damage</style>. Consumed marks cannot be reapplied for <style=cIsUtility>{2} seconds</style>.",
 
     "FFTS_CLOAKER_SPECIAL2_NAME": "Screech",
-    "FFTS_CLOAKER_SPECIAL2_DESCRIPTION": "Unleash a shockwave for <style=cIsDamage>{0}% damage</style> to enemies within <style=cIsUtility>{1}m</style>, knocking them back.",
+    "FFTS_CLOAKER_SPECIAL2_DESCRIPTION": "Unleash a shockwave for <style=cIsDamage>{0}% damage</style> to enemies within <style=cIsUtility>{1}m</style>, knocking them back and applying Mark.",
+
+    "FFTS_CLOAKER_MARK_KEYWORD": "<style=cKeywordName>Mark</style><style=cSub>Cloaker's hits with a positive proc coefficient consume the mark and deal <style=cIsDamage>{1}x total damage</style>, with the bonus dealt as a separate hit. If either hit kills the target, gain <style=cIsUtility>3x the gold and experience</style>, stealth for <style=cIsUtility>{4} seconds</style>, and reset <style=cIsUtility>all skill cooldowns</style>.</style>",
 
     "FFTS_CLOAKER_LORE": "An unseen threat waits for the right moment.",
     "FFTS_CLOAKER_BODY_LORE": "An unseen threat waits for the right moment.",

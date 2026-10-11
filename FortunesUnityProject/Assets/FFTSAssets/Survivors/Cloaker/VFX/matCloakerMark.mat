@@ -41,8 +41,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaBias: 0.365
-    - _AlphaBoost: 2.11
+    - _AlphaBias: 0
+    - _AlphaBoost: 1
     - _Boost: 2
     - _BumpScale: 1
     - _CalcTextureAlphaOn: 0
@@ -74,7 +74,7 @@ Material:
     - _SkyboxOnly: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _UVSec: 0
     - _UseUV1On: 0
     - _VertexAlphaOn: 0

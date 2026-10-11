@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2596550567
+CRC: 2800186114
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5348d9b655322bb99ceed17636af06b2
+    Hash: a1426f8e8412ac227425ea6ff2d9344e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 922729027b3f9ab8459022e563676e58
+    Hash: 57d7c0e9c198ed09edc538d90fbe957a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -43,6 +43,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 678291247, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+- Class: 114
+  Script: {fileID: 422384671, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: 1297580292, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
@@ -96,8 +98,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 1790887305, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
-  Script: {fileID: 422384671, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: -1811796171, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
@@ -111,8 +111,6 @@ ClassTypes:
   Script: {fileID: -1067940895, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: -197296741, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-- Class: 114
-  Script: {fileID: 953270592, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: -1277448904, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
@@ -241,12 +239,6 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: AK.Wwise.Unity.API.WwiseTypes
   ClassName: AK.Wwise.Event
 - AssemblyName: HGUnityUtils
-  ClassName: HG.BlendableTypes.BlendableBool
-- AssemblyName: HGUnityUtils
-  ClassName: HG.BlendableTypes.BlendableFloat
-- AssemblyName: HGUnityUtils
-  ClassName: HG.BlendableTypes.BlendableVector3
-- AssemblyName: HGUnityUtils
   ClassName: HG.SerializableSystemType
 - AssemblyName: MSU.Runtime
   ClassName: MSU.AchievableUnlockableDef/PreRequisiteAchievementIdentifier
@@ -262,8 +254,6 @@ SerializeReferenceClassIdentifiers:
   ClassName: RoR2.AddressableAssets.IDRSKeyAssetReference
 - AssemblyName: RoR2
   ClassName: RoR2.CharacterAI.BaseAI/FollowPattern
-- AssemblyName: RoR2
-  ClassName: RoR2.CharacterCameraParamsData
 - AssemblyName: RoR2
   ClassName: RoR2.CharacterFlightParameters
 - AssemblyName: RoR2
@@ -341,8 +331,9 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/Assets/matDukeVisorAlt.mat
 - Assets/FFTSAssets/Survivors/Wrecker/WreckerEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/CloakerPrimaryFamily.asset
-- Assets/FFTSAssets/Survivors/Duke/Duke.asset
+- Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerImpact.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunB_Dual.fbx
+- Assets/FFTSAssets/Survivors/Duke/Duke.asset
 - Assets/FFTSAssets/Survivors/Cloaker/matCloaker2.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/Cloaker_Special_Stealthed.png
 - Assets/FFTSAssets/Survivors/Duke/Animations/dukeLeftArmMask.mask
@@ -351,6 +342,7 @@ Assets:
 - Assets/FFTSAssets/Survivors/Wrecker/Projectiles/matWreckerDiskRing.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/cloakerAimMask.mask
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeGunEmission.png
+- Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerHitspark.mat
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/SecondarySkillDef.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeEmission.png
@@ -372,9 +364,10 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@RunR.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Buffs/bdCloakerMarked.asset
 - Assets/FFTSAssets/Survivors/Duke/Skills/SteadyHandSkillDef.asset
-- Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterBodyEmission.png
+- Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Skill_Special01_Dual_Windup.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/CloakerDisplay.prefab
 - Assets/FFTSAssets/Survivors/Wrecker/matWreckerGun.mat
+- Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterBodyEmission.png
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/WreckerUtilityFamily.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/Cloaker_Secondary_Rough_2.png
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerMarkedConsumeEffect.prefab
@@ -459,15 +452,15 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunF_Dual.fbx
 - Assets/FFTSAssets/Survivors/Duke/Skills/FanTheHammerSkillDef.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/Special2SkillDef.asset
-- Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerScreechEffect.prefab
+- Assets/FFTSAssets/Survivors/Cloaker/texRampMark.png
 - Assets/FFTSAssets/Survivors/Cloaker/CloakerBody.prefab
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeMonsoonNormal.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Skill_Secondary_Fire_Dual.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerRangeIndicator.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_02_diffuse.png
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/PassiveAltSkillDef.asset
+- Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Special01_Windup.fbx
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/texRampRicochet.png
-- Assets/FFTSAssets/Survivors/Wrecker/Skills/WreckerSpecialFamily.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Secondary_Idle.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Ascend_Dual.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Utility.fbx
@@ -475,17 +468,20 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunBR_Dual.fbx
 - Assets/FFTSAssets/Survivors/Duke/Assets/skinDukeMonsoon.asset
 - Assets/FFTSAssets/Survivors/Duke/Skills/PretentiousMimicrySkillDef.asset
-- Assets/FFTSAssets/Survivors/Duke/Skills/DukeSecondarySkillFamily.asset
+- Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerMarkedSuccessfulConsumeEffect.prefab
 - Assets/FFTSAssets/Survivors/Wrecker/Projectiles/WreckerSoundScapeProjectile.prefab
-- Assets/FFTSAssets/Survivors/Wrecker/Buffs/bdWreckerSoundBuff.asset
+- Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerScreechEffect.prefab
+- Assets/FFTSAssets/Survivors/Duke/Skills/DukeSecondarySkillFamily.asset
 - Assets/FFTSAssets/Survivors/Cloaker/UI/texCloakerCrosshairOutNibRight.png
+- Assets/FFTSAssets/Survivors/Wrecker/Buffs/bdWreckerSoundBuff.asset
+- Assets/FFTSAssets/Survivors/Wrecker/Skills/WreckerSpecialFamily.asset
 - Assets/FFTSAssets/Survivors/Wrecker/Projectiles/WreckerDiskBombGhost.prefab
 - Assets/FFTSAssets/Survivors/Wrecker/WreckerMonsterMaster.prefab
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/matRicochetTwinkle.mat
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/matDukeDecoyGun.mat
 - Assets/FFTSAssets/Survivors/Wrecker/Animations/GestureMask.mask
 - Assets/FFTSAssets/Survivors/Duke/DukeMonsterMaster.prefab
-- Assets/FFTSAssets/Survivors/Cloaker/Animations/cloakerLeftArmMask.mask
+- Assets/FFTSAssets/Survivors/Cloaker/Animations/cloakerShootMask.mask
 - Assets/FFTSAssets/Survivors/Duke/duke_emoteskeleton.fbx
 - Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterGunNormals.png
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/matDukeVisorDecoy.mat
@@ -593,6 +589,7 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterGunEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_02_normal.png
 - Assets/FFTSAssets/Survivors/Wrecker/WreckerNormalTemp.png
+- Assets/FFTSAssets/Survivors/Cloaker/matCloakerMark.mat
 - Assets/FFTSAssets/Survivors/Duke/Skills/iconDukeSecondary.png
 - Assets/FFTSAssets/Survivors/Cloaker/Buffs/bdCloakerMarkCd.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/PrimarySkillDef.asset
@@ -601,6 +598,7 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@RunL.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/SecondarySkillDef.asset
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerMarkedBuffIcon.png
+- Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerSuccessfulMark.mat
 Dependencies:
 - D:/RoR2Mods/Fortunes-from-the-Scrapyard/FortunesUnityProject/AssetBundles/StandaloneWindows/fftsbase
 - D:/RoR2Mods/Fortunes-from-the-Scrapyard/FortunesUnityProject/AssetBundles/StandaloneWindows/fftsitems

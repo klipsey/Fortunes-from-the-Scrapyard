@@ -16,10 +16,11 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         internal const string ShotSound = "Play_sfx_cloaker_shot";
         internal const string PingSound = "Play_sfx_cloaker_ping";
         internal const string ScreamSound = "Play_sfx_cloaker_scream";
+        internal const string DashSound = "Play_drifter_repossess_dash";
         internal static NetworkSoundEventDef StealthSound;
         internal static GameObject RailTracer, RailImpact, ChargeCrosshair, GoldTracer, CritTracer;
         internal static GameObject PistolMuzzle, PistolImpact;
-        internal static GameObject RangeIndicator, TrackingIndicator, ConsumeEffect, ScreechEffect;
+        internal static GameObject RangeIndicator, TrackingIndicator, ConsumeEffect, SuccessfulConsumeEffect, ScreechEffect;
 
         internal static void Initialize(SurvivorAssetCollection collection)
         {
@@ -35,7 +36,20 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             TrackingIndicator = collection.FindAsset<GameObject>("CloakerTrackingIndicator");
             ConsumeEffect = collection.FindAsset<GameObject>("CloakerMarkedConsumeEffect");
             ScreechEffect = collection.FindAsset<GameObject>("CloakerScreechEffect");
-            ScreechEffect.GetComponent<EffectComponent>().soundName = ScreamSound;
+            SuccessfulConsumeEffect = collection.FindAsset<GameObject>("CloakerMarkedSuccessfulConsumeEffect");
+            BuffDef markedBuff = collection.FindAsset<BuffDef>("bdCloakerMarked");
+            Material markOverlayMaterial = collection.FindAsset<Material>("matCloakerMark");
+            if (!markedBuff || !markOverlayMaterial)
+                throw new InvalidOperationException("Cloaker's marked buff or overlay material is missing from acCloaker.");
+            if (BuffOverlays.dictionaryCreated)
+                throw new InvalidOperationException("Cloaker's mark overlay must be registered before MSU initializes buff overlays.");
+            BuffOverlays.AddBuffOverlay(markedBuff, markOverlayMaterial);
+            BuffDef akimboSpeed = ScriptableObject.CreateInstance<BuffDef>();
+            akimboSpeed.name = "bdCloakerAkimboSpeed";
+            akimboSpeed.buffColor = new Color(0.75f, 0.33f, 1f);
+            akimboSpeed.iconSprite = markedBuff.iconSprite;
+            FFTSContent.fftsContentPack.buffDefs.AddSingle(akimboSpeed);
+            FFTSContent.Buffs.bdCloakerAkimboSpeed = akimboSpeed;
             GameObject mark = collection.FindAsset<GameObject>("CloakerMarkEffect");
             if (!TempVisualEffectAPI.AddTemporaryVisualEffect(mark,
                 body => body.HasBuff(FFTSContent.Buffs.bdCloakerMarked), true))
@@ -51,7 +65,6 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
                 RangeIndicator.transform.Find(target).GetComponent<MeshRenderer>().sharedMaterial = material;
             }
         }
-
         internal static T LoadAddress<T>(string key) where T : UnityEngine.Object
         {
             AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key);
@@ -69,6 +82,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             emitter.enabled = true;
             CopyBanks("RoR2/Base/Bandit2/Bandit2Body.prefab");
             CopyBanks("RoR2/Base/Huntress/HuntressBody.prefab");
+            CopyBanks("RoR2/DLC3/Drifter/DrifterBody.prefab");
             void CopyBanks(string key)
             {
                 AkBank[] sources = LoadAddress<GameObject>(key).GetComponents<AkBank>();

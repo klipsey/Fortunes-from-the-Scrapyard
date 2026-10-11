@@ -15,14 +15,15 @@ MonoBehaviour:
   skillName: CloakerScreech
   skillNameToken: FFTS_CLOAKER_SPECIAL2_NAME
   skillDescriptionToken: FFTS_CLOAKER_SPECIAL2_DESCRIPTION
-  keywordTokens: []
+  keywordTokens:
+  - FFTS_CLOAKER_MARK_KEYWORD
   icon: {fileID: 21300000, guid: d22e32aa7b593374eb1846303eb26731, type: 3}
   activationStateMachineName: Weapon
   activationState:
     _typeName: EntityStates.Cloaker.CloakerScreech, FortunesFromTheScrapyard, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   interruptPriority: 2
-  baseRechargeInterval: 15
+  baseRechargeInterval: 8
   baseMaxStock: 1
   rechargeStock: 1
   requiredStock: 1

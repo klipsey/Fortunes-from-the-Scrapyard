@@ -14,7 +14,7 @@ namespace FortunesFromTheScrapyard.Items
     public class Takeout : FFTSItem
     {
         public const string TOKEN = "FFTS_ITEM_TAKEOUT_DESCRIPTION";
-        internal const float radius = 13f;
+        internal const float radius = 26f;
         internal const int noodlesDecaySteps = 10;
 
         [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 20f)]
@@ -75,7 +75,7 @@ namespace FortunesFromTheScrapyard.Items
             chickenExplosionEffect.EnsureComponent<EffectComponent>().applyScale = true;
             FFTSContent.CreateAndAddEffectDef(chickenExplosionEffect);
 
-            AssetAsyncReferenceManager<GameObject>.LoadAsset(new AssetReferenceT<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_BeetleQueen.BeetleAcidImpact_prefab)).Completed += x =>
+            Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.RoR2_Base_BeetleQueen.BeetleAcidImpact_prefab).Completed += x =>
             {
                 potstickerImpactEffect = x.Result.InstantiateClone("PotstickersImpactEffect", false);
                 potstickerImpactEffect.EnsureComponent<EffectComponent>();
@@ -96,7 +96,7 @@ namespace FortunesFromTheScrapyard.Items
 
             food.transform.Find("Radius").gameObject.GetComponent<MeshRenderer>().material = foodf.transform.Find("Radius, Spherical").gameObject.GetComponent<MeshRenderer>().material;
             food.transform.Find("Radius").gameObject.GetComponent<MeshRenderer>().material.SetColor("_TintColor", color);
-            food.transform.Find("Radius").localScale = Vector3.one * radius;
+            food.transform.Find("Radius").localScale = Vector3.one * radius * 2f;
 
             food.GetComponentInChildren<Collider>().enabled = false;
 
@@ -211,8 +211,8 @@ namespace FortunesFromTheScrapyard.Items
 
                     EffectManager.SpawnEffect(chickenExplosionEffect, new EffectData
                     {
-                        origin = body.corePosition,
-                        scale = radius
+                        origin = damageInfo.position,
+                        scale = radius * 0.5f
                     }, transmit: true);
                 }
                 else if (nextFood == FFTSContent.Buffs.bdTakeoutSpeed)

@@ -9,17 +9,17 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
 {
     public class CloakerController : MonoBehaviour
     {
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Out-of-combat delay before passive stealth, in seconds. Reduced by cooldown reduction.")]
-        [FormatToken(Cloaker.PASSIVETOKEN, 0)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Delay after stealth breaks before passive stealth returns, even in combat. Reduced by cooldown reduction.")]
+        [FormatToken(CloakerSurvivor.PASSIVETOKEN, 0)]
         public static float BaseRestealthCooldown = 4f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Seconds Restealth protects Cloak from damage and proximity reveals.")]
-        [FormatToken(Cloaker.UTILITYTOKEN, 1)]
-        public static float BaseGracePeriod = 3f;
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Seconds Restealth protects Cloak from enemy proximity reveals. Attacking and taking damage still break stealth.")]
+        [FormatToken(CloakerSurvivor.UTILITYTOKEN, 1)]
+        public static float BaseGracePeriod = 2f;
 
         private const float DefaultDetectionRadius = 6f;
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 50f, configDescOverride = "Enemy proximity reveal radius in meters.")]
-        [FormatToken(Cloaker.PASSIVETOKEN, 2)]
+        [FormatToken(CloakerSurvivor.PASSIVETOKEN, 2)]
         public static float DetectionRadius = DefaultDetectionRadius;
 
         public SkillDef passiveCloakSkillDef;
@@ -86,17 +86,40 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         public void StartGracePeriod()
         {
             graceTimer = BaseGracePeriod;
+            EnterPassiveStealth();
+        }
+
+        public float GetStealthAttackDamage(float damage)
+            => body.hasCloakBuff ? damage * (1f + CloakerSurvivor.CloakDamageBonus) : damage;
+
+        private void EnterPassiveStealth()
+        {
+            restealthTimer = 0f;
             passiveCloakOn = true;
+            if (!NetworkServer.active) return;
+            bool wasCloaked = body.hasCloakBuff;
+            body.ClearTimedBuffs(RoR2Content.Buffs.Cloak);
+            body.ClearTimedBuffs(RoR2Content.Buffs.CloakSpeed);
+            if (!body.HasBuff(RoR2Content.Buffs.Cloak))
+                body.AddBuff(RoR2Content.Buffs.Cloak);
+            if (!body.HasBuff(RoR2Content.Buffs.CloakSpeed))
+                body.AddBuff(RoR2Content.Buffs.CloakSpeed);
+            if (!wasCloaked)
+                EffectManager.SimpleSoundEffect(CloakerAssets.StealthSound.index, body.corePosition, true);
         }
 
         public void BreakStealth()
         {
             if (NetworkServer.active)
             {
+                body.ClearTimedBuffs(RoR2Content.Buffs.Cloak);
+                body.ClearTimedBuffs(RoR2Content.Buffs.CloakSpeed);
                 if (body.HasBuff(RoR2Content.Buffs.Cloak)) body.RemoveBuff(RoR2Content.Buffs.Cloak);
                 if (body.HasBuff(RoR2Content.Buffs.CloakSpeed)) body.RemoveBuff(RoR2Content.Buffs.CloakSpeed);
             }
             passiveCloakOn = false;
+            restealthTimer = 0f;
+            graceTimer = 0f;
         }
 
         private void FixedUpdate()
@@ -105,20 +128,11 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             graceTimer = Mathf.Max(0f, graceTimer - Time.fixedDeltaTime);
             if (NetworkServer.active && body.healthComponent && body.healthComponent.alive && !isAkimbo)
             {
-                if (body.outOfCombat)
-                {
-                    restealthTimer += Time.fixedDeltaTime;
-                    float cooldown = Mathf.Min(BaseRestealthCooldown,
-                        Mathf.Max(0.5f, BaseRestealthCooldown * skills.primary.cooldownScale - skills.primary.flatCooldownReduction));
-                    if (restealthTimer >= cooldown && !body.hasCloakBuff && !passiveCloakOn)
-                    {
-                        restealthTimer = 0f;
-                        passiveCloakOn = true;
-                        body.AddBuff(RoR2Content.Buffs.Cloak);
-                        body.AddBuff(RoR2Content.Buffs.CloakSpeed);
-                        EffectManager.SimpleSoundEffect(CloakerAssets.StealthSound.index, body.corePosition, true);
-                    }
-                }
+                restealthTimer += Time.fixedDeltaTime;
+                float cooldown = Mathf.Min(BaseRestealthCooldown,
+                    Mathf.Max(0.5f, BaseRestealthCooldown * skills.primary.cooldownScale - skills.primary.flatCooldownReduction));
+                if (restealthTimer >= cooldown && !body.hasCloakBuff && !passiveCloakOn)
+                    EnterPassiveStealth();
                 if (passiveCloakOn && body.hasCloakBuff && graceTimer <= 0f) CheckProximity();
                 if (!body.hasCloakBuff) passiveCloakOn = false;
             }

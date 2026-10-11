@@ -8,7 +8,7 @@ using RoR2;
 using RoR2.Skills;
 using UnityEngine;
 using UnityEngine.Networking;
-using CloakerContent = FortunesFromTheScrapyard.Survivors.Cloaker.Cloaker;
+using CloakerContent = FortunesFromTheScrapyard.Survivors.Cloaker.CloakerSurvivor;
 
 namespace EntityStates.Cloaker.Weapon
 {
@@ -46,18 +46,20 @@ namespace EntityStates.Cloaker.Weapon
         {
             base.OnEnter();
             if (!charged) damageCoefficient = PrimaryDamageCoefficient;
-            if (charged) damageStat = cloakedDamage ?? damageStat;
             CloakerController controller = GetComponent<CloakerController>();
+            damageStat = charged && cloakedDamage.HasValue
+                ? cloakedDamage.Value : controller.GetStealthAttackDamage(damageStat);
             controller.BreakStealth();
             duration = BaseDuration / attackSpeedStat;
             characterBody.isSprinting = false;
             characterBody.SetAimTimer(2f);
             muzzle = controller.isAkimbo && step % 2 != 0 ? "MuzzleLeft" : "MuzzleRight";
             if (isAuthority) crit = RollCrit();
+            string animationLayer = charged ? "Gesture, Override" : "Shoot, Override";
             string animation = charged ? "ShootSecondary"
                 : controller.isAkimbo ? (muzzle == "MuzzleLeft" ? "ShootDual2" : "ShootDual1") : "Shoot";
-            PlayCrossfade("Gesture, Override", controller.GetAnimationStateName("Gesture, Override", animation),
-                charged ? "Secondary.playbackRate" : "Primary.playbackRate", duration, duration * 0.15f);
+            PlayCrossfade(animationLayer, controller.GetAnimationStateName(animationLayer, animation),
+                charged ? "Secondary.playbackRate" : "Primary.playbackRate", charged ? duration * 3f : duration, duration * 0.15f);
             EffectManager.SimpleMuzzleFlash(CloakerAssets.PistolMuzzle, gameObject, muzzle, false);
             Util.PlaySound(charged ? CloakerAssets.ChargedShotSound : CloakerAssets.ShotSound, gameObject);
             if (isAuthority) Fire();
