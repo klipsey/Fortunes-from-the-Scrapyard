@@ -48,7 +48,7 @@ Material:
     - _CloudsOn: 0
     - _Cull: 0
     - _Cutoff: 0.5
-    - _DepthOffset: -9.29
+    - _DepthOffset: 0
     - _DetailNormalMapScale: 1
     - _DisableRemapOn: 0
     - _DistortionStrength: 0.12
@@ -78,8 +78,8 @@ Material:
     - _VertexAlphaOn: 0
     - _VertexColorOn: 1
     - _VertexOffsetOn: 0
-    - _ZTest: 2
-    - _ZWrite: 1
+    - _ZTest: 4
+    - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CutoffScroll: {r: -25, g: 0, b: -30, a: 0}

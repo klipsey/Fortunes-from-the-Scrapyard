@@ -37,6 +37,8 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             ConsumeEffect = collection.FindAsset<GameObject>("CloakerMarkedConsumeEffect");
             ScreechEffect = collection.FindAsset<GameObject>("CloakerScreechEffect");
             SuccessfulConsumeEffect = collection.FindAsset<GameObject>("CloakerMarkedSuccessfulConsumeEffect");
+            ConfigureMarkConsumptionMaterials(ConsumeEffect);
+            ConfigureMarkConsumptionMaterials(SuccessfulConsumeEffect);
             BuffDef markedBuff = collection.FindAsset<BuffDef>("bdCloakerMarked");
             Material markOverlayMaterial = collection.FindAsset<Material>("matCloakerMark");
             if (!markedBuff || !markOverlayMaterial)
@@ -65,6 +67,29 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
                 RangeIndicator.transform.Find(target).GetComponent<MeshRenderer>().sharedMaterial = material;
             }
         }
+
+        private static void ConfigureMarkConsumptionMaterials(GameObject effect)
+        {
+            if (!effect)
+                throw new InvalidOperationException("Cloaker's mark consumption effect is missing.");
+
+            foreach (ParticleSystemRenderer renderer in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
+            {
+                Material material = renderer.sharedMaterial;
+                if (!material || (material.name != "matCloakerMarkBackdrop"
+                    && material.name != "matCloakerSuccessfulMark" && material.name != "matCloakerHitspark"))
+                    continue;
+
+                material.SetFloat("_CloudsOn", 0f);
+                material.DisableKeyword("USE_CLOUDS");
+                material.SetFloat("_VertexColorOn", 1f);
+                material.EnableKeyword("VERTEXCOLOR");
+                material.SetFloat("_DepthOffset", 0f);
+                material.SetFloat("_ZTest", (float)UnityEngine.Rendering.CompareFunction.LessEqual);
+                material.SetFloat("_ZWrite", 0f);
+            }
+        }
+
         internal static T LoadAddress<T>(string key) where T : UnityEngine.Object
         {
             AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key);
