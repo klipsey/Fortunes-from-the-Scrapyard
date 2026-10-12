@@ -29,6 +29,9 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
         public const string MINETOKEN = "FFTS_DUKE_KINETIC_DESC";
         public const string CLONETOKEN = "FFTS_DUKE_CLONE_DESC";
 
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, restartRequired = true, configDescOverride = "Enable the Duke survivor. Requires a restart.", configSectionOverride = "Duke", configNameOverride = "Enable Duke")]
+        public static bool enableDuke = false;
+
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Duke - Salvo", configNameOverride = "Damage Coefficient")]
         [FormatToken(SALVOTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float baseSalvoDamageCoefficient = 3.75f;
@@ -155,7 +158,7 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
         }
         public override bool IsAvailable(ContentPack contentPack)
         {
-            return true;
+            return enableDuke;
         }
 
         public override FFTSAssetRequest<SurvivorAssetCollection> LoadAssetRequest()

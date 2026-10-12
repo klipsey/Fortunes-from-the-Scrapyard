@@ -86,7 +86,10 @@ namespace FortunesFromTheScrapyard.Items
                         body.AddBuff(FFTSContent.Buffs.bdFaultyTurbo);
                     }
 
-                    EffectManager.SimpleSoundEffect(turboSfx.index, body.corePosition, false);
+                    if (body.master?.playerCharacterMasterController?.networkUser?.isLocalPlayer == true)
+                    {
+                        EffectManager.SimpleSoundEffect(turboSfx.index, body.corePosition, false);
+                    }
                 }
                 else if (timer < 0f && body.HasBuff(FFTSContent.Buffs.bdFaultyTurbo) && !base.body.isSprinting)
                 {
