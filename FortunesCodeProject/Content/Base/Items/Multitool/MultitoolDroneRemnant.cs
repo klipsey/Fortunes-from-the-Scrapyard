@@ -56,13 +56,7 @@ namespace FortunesFromTheScrapyard.Items
             remnant.visualScale = purchase.transform.localScale;
             remnant.remnantPosition = purchase.transform.position;
             remnant.isTurret = purchasedMaster.bodyPrefab.name == "Turret1Body";
-            CharacterBody body = purchasedMaster.GetBody();
-            remnant.placementRadius = Mathf.Max(1f, body ? body.radius : 1f);
-            if (body && body.TryGetComponent(out Collider bodyCollider))
-            {
-                Vector3 extents = bodyCollider.bounds.extents;
-                remnant.placementRadius = Mathf.Max(remnant.placementRadius, extents.x, extents.z);
-            }
+            remnant.placementRadius = GetPlacementRadius(purchasedMaster);
             remnant.equipmentIndex = purchasedMaster.inventory.GetEquipmentIndex();
             ItemIndex upgradeItem = ItemCatalog.FindItemIndex("DroneUpgradeHidden");
             remnant.upgradeCount = upgradeItem != ItemIndex.None ? purchasedMaster.inventory.GetItemCount(upgradeItem) : 0;
@@ -71,6 +65,18 @@ namespace FortunesFromTheScrapyard.Items
                 FFTSLog.Warning("Multitool turret remnant is waiting for an unoccupied ground node.");
             instance.transform.position = remnant.remnantPosition;
             NetworkServer.Spawn(instance);
+        }
+
+        internal static float GetPlacementRadius(CharacterMaster master)
+        {
+            CharacterBody body = master.GetBody();
+            float radius = Mathf.Max(1f, body ? body.radius : 1f);
+            if (body && body.TryGetComponent(out Collider bodyCollider))
+            {
+                Vector3 extents = bodyCollider.bounds.extents;
+                radius = Mathf.Max(radius, extents.x, extents.z);
+            }
+            return radius;
         }
 
         private static int FindSourcePrefabIndex(NetworkIdentity identity)
@@ -152,7 +158,7 @@ namespace FortunesFromTheScrapyard.Items
             return true;
         }
 
-        private static bool TryFindTurretPosition(Vector3 origin, float radius, MultitoolDroneRemnant excluded,
+        internal static bool TryFindTurretPosition(Vector3 origin, float radius, MultitoolDroneRemnant excluded,
             out Vector3 position, out NodeGraph.NodeIndex chosenNode)
         {
             position = origin;
@@ -277,6 +283,11 @@ namespace FortunesFromTheScrapyard.Items
         }
 
         private void SetupInventory(CharacterMaster master)
+        {
+            SetupInventory(master, upgradeCount, equipmentIndex);
+        }
+
+        internal static void SetupInventory(CharacterMaster master, int upgradeCount, EquipmentIndex equipmentIndex)
         {
             ItemIndex upgradeItem = ItemCatalog.FindItemIndex("DroneUpgradeHidden");
             if (upgradeCount > 0 && upgradeItem != ItemIndex.None)

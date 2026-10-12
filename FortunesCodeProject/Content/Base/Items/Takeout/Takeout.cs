@@ -14,7 +14,7 @@ namespace FortunesFromTheScrapyard.Items
     public class Takeout : FFTSItem
     {
         public const string TOKEN = "FFTS_ITEM_TAKEOUT_DESCRIPTION";
-        internal const float radius = 26f;
+        internal const float radius = 13f;
         internal const int noodlesDecaySteps = 10;
 
         [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 20f)]

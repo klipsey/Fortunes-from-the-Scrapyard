@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Configurations>Release;Debug;Mystical;Kenko;Whoever2;ToUnity</Configurations>
+    <ProfilePluginsDirectory Condition="'$(ProfilePluginsDirectory)' == '' And ('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' Or '$(Configuration)' == 'Kenko')">F:\WebfishingMods\RiskOfRain2\profiles\testing\BepInEx\plugins\fortunesteam-FortunesFromTheScrapyard</ProfilePluginsDirectory>
+    <ProfilePluginsDirectory Condition="'$(ProfilePluginsDirectory)' == '' And '$(Configuration)' == 'Mystical'">B:\gale-profiles\riskofrain2\profiles\FortunesFromTheGraveyard\BepInEx\plugins\fortunesteam-FortunesFromTheScrapyard</ProfilePluginsDirectory>
+    <ProfilePluginsDirectory Condition="'$(ProfilePluginsDirectory)' == '' And '$(Configuration)' == 'Whoever2'">targetpluginspath\fortunesteam-FortunesFromTheScrapyard</ProfilePluginsDirectory>
+    <DisableFastUpToDateCheck Condition="'$(ProfilePluginsDirectory)' != ''">true</DisableFastUpToDateCheck>
+    <ThumbsgupSource>$(MSBuildProjectDirectory)\..\FortunesUnityProject\Assets\FFTSAssets\Survivors\thumbsgup.png</ThumbsgupSource>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,6 +43,7 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="nuget.config" />
+    <None Include="$(ThumbsgupSource)" Link="thumbsgup.png" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
   </ItemGroup>
 	<ItemGroup>
 		<Reference Include="ShaderSwapper">
@@ -77,6 +83,9 @@
 		<PackageReference Include="R2API.Sound" Version="1.*" />
 		<PackageReference Include="R2API.ProcType" Version="1.*" />
 	</ItemGroup>
+  <Target Name="RequireThumbsgup" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(ThumbsgupSource)')" Text="thumbsgup.png is load-bearing. Restore '$(ThumbsgupSource)' before building the mod." />
+  </Target>
   <Target Name="WeaveNetworkAssembly" DependsOnTargets="ResolveReferences" Condition="'$(Configuration)' != 'ToUnity'">
     <PropertyGroup>
       <_WeaverDirectory Condition="'$(_WeaverDirectory)' == ''">$(MSBuildProjectDirectory)\Weaver</_WeaverDirectory>
@@ -106,6 +115,8 @@
   <Target Name="StagePluginBuild" BeforeTargets="PostBuild" DependsOnTargets="WeaveNetworkAssembly">
     <PropertyGroup>
       <_BuildPluginsDirectory Condition="'$(_BuildPluginsDirectory)' == ''">$(MSBuildProjectDirectory)\..\Build\plugins</_BuildPluginsDirectory>
+      <_SoundBankSource>$(MSBuildProjectDirectory)\..\FortunesUnityProject\Assets\StreamingAssets\aa\FFTSSoundBank.bnk</_SoundBankSource>
+      <_StagedSoundBank>$(_BuildPluginsDirectory)\Soundbanks\FFTSSoundBank.bnk</_StagedSoundBank>
       <_AssemblyToStage>$(TargetPath)</_AssemblyToStage>
       <_AssemblyToStage Condition="'$(Configuration)' != 'ToUnity' And Exists('$(_WeaverOutputDirectory)\$(TargetFileName)')">$(_WeaverOutputDirectory)\$(TargetFileName)</_AssemblyToStage>
     </PropertyGroup>
@@ -114,14 +125,24 @@
       <_ObsoleteSymbols Include="$(TargetName).pdb;$(TargetFileName).mdb" />
       <_AssetBundles Include="$(MSBuildProjectDirectory)\..\FortunesUnityProject\AssetBundles\StandaloneWindows\*" Exclude="$(MSBuildProjectDirectory)\..\FortunesUnityProject\AssetBundles\StandaloneWindows\StandaloneWindows;$(MSBuildProjectDirectory)\..\FortunesUnityProject\AssetBundles\StandaloneWindows\StandaloneWindows.manifest" />
     </ItemGroup>
+    <Error Condition="!Exists('$(_SoundBankSource)') And !Exists('$(_StagedSoundBank)')" Text="FFTSSoundBank.bnk was not found in Unity StreamingAssets or Build\plugins\Soundbanks. Generate the Wwise soundbank before deploying the mod." />
+    <Warning Condition="!Exists('$(_SoundBankSource)')" Text="No newly generated FFTSSoundBank.bnk was found in Unity StreamingAssets. Deploying the existing staged soundbank from '$(_StagedSoundBank)'." />
     <Warning Condition="'@(_AssetBundles)' == ''" Text="No exported Unity asset bundles were found in FortunesUnityProject\AssetBundles\StandaloneWindows. Build the bundles in Unity before running or deploying the mod; existing staged bundles will not be updated." />
     <Delete Files="@(_ObsoleteSymbols->'$(_BuildPluginsDirectory)\%(Identity)')" />
     <Copy SourceFiles="@(_PluginAssembly)" DestinationFolder="$(_BuildPluginsDirectory)" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\FortunesUnityProject\Assets\StreamingAssets\aa\FFTSSoundBank.bnk" DestinationFiles="$(_BuildPluginsDirectory)\Soundbanks\FFTSSoundBank.bnk" />
+    <Copy SourceFiles="$(ThumbsgupSource)" DestinationFolder="$(_BuildPluginsDirectory)" />
+    <Copy SourceFiles="$(_SoundBankSource)" DestinationFiles="$(_StagedSoundBank)" Condition="Exists('$(_SoundBankSource)')" />
     <Copy SourceFiles="@(_AssetBundles)" DestinationFolder="$(_BuildPluginsDirectory)\AssetBundles" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="@echo off&#xD;&#xA;setlocal&#xD;&#xA;set &quot;profilePlugins=&quot;&#xD;&#xA;if &quot;$(Configuration)&quot; == &quot;Mystical&quot; set &quot;profilePlugins=B:\gale-profiles\riskofrain2\profiles\FortunesFromTheGraveyard\BepInEx\plugins\fortunesteam-FortunesFromTheScrapyard&quot;&#xD;&#xA;if &quot;$(Configuration)&quot; == &quot;Kenko&quot; set &quot;profilePlugins=F:\WebfishingMods\RiskOfRain2\profiles\testing\BepInEx\plugins\fortunesteam-FortunesFromTheScrapyard&quot;&#xD;&#xA;if &quot;$(Configuration)&quot; == &quot;Whoever2&quot; set &quot;profilePlugins=targetpluginspath\fortunesteam-FortunesFromTheScrapyard&quot;&#xD;&#xA;&#xD;&#xA;if defined profilePlugins (&#xD;&#xA; for %25%25F in (&quot;$(TargetName).pdb&quot; &quot;$(TargetFileName).mdb&quot;) do (&#xD;&#xA;  if not exist &quot;$(_BuildPluginsDirectory)\%25%25~F&quot; if exist &quot;%25profilePlugins%25\%25%25~F&quot; (&#xD;&#xA;   del /F /Q &quot;%25profilePlugins%25\%25%25~F&quot; || exit /b 1&#xD;&#xA;  )&#xD;&#xA; )&#xD;&#xA; xcopy &quot;$(_BuildPluginsDirectory)\*&quot; &quot;%25profilePlugins%25\&quot; /E /I /Y || exit /b 1&#xD;&#xA;)&#xD;&#xA;if &quot;$(Configuration)&quot; == &quot;ToUnity&quot; (&#xD;&#xA; xcopy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\FortunesUnityProject\Packages\FortunesFromTheScrapyard\&quot; /I /Y || exit /b 1&#xD;&#xA;)&#xD;&#xA;exit /b 0" WorkingDirectory="$(ProjectDir)" />
+    <ItemGroup Condition="'$(ProfilePluginsDirectory)' != ''">
+      <_ProfilePluginFiles Include="$(_BuildPluginsDirectory)\**\*" />
+    </ItemGroup>
+    <Delete Files="@(_ObsoleteSymbols->'$(ProfilePluginsDirectory)\%(Identity)')" Condition="'$(ProfilePluginsDirectory)' != ''" />
+    <Copy SourceFiles="@(_ProfilePluginFiles)" DestinationFiles="@(_ProfilePluginFiles->'$(ProfilePluginsDirectory)\%(RecursiveDir)%(Filename)%(Extension)')" Condition="'$(ProfilePluginsDirectory)' != ''" />
+    <Message Importance="high" Text="Deployed $(TargetFileName) and plugin assets to '$(ProfilePluginsDirectory)'." Condition="'$(ProfilePluginsDirectory)' != ''" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildProjectDirectory)\..\FortunesUnityProject\Packages\FortunesFromTheScrapyard" Condition="'$(Configuration)' == 'ToUnity'" />
+    <Copy SourceFiles="$(ThumbsgupSource)" DestinationFolder="$(MSBuildProjectDirectory)\..\FortunesUnityProject\Packages\FortunesFromTheScrapyard" Condition="'$(Configuration)' == 'ToUnity'" />
   </Target>
 	<Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
 		<ItemGroup>

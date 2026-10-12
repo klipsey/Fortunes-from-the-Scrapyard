@@ -4,7 +4,6 @@ using EntityStates;
 using MSU;
 using MSU.Config;
 using RoR2;
-using RoR2.UI;
 using UnityEngine;
 using UnityEngine.Networking;
 using CloakerContent = FortunesFromTheScrapyard.Survivors.Cloaker.CloakerSurvivor;
@@ -13,20 +12,19 @@ namespace EntityStates.Cloaker.Weapon
 {
     public class CloakerChargeShot : BaseSkillState
     {
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Fully charged shot damage coefficient. 5 deals 500% damage.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Fully charged shot damage coefficient. 5 deals 500% damage.", configSectionOverride = "Cloaker - Shoot Harder", configNameOverride = "Maximum Damage Coefficient")]
         [FormatToken(CloakerContent.SECONDARYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float MaxDamageCoefficient = 5f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 10f, configDescOverride = "Full charge time in seconds before attack speed scaling.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 10f, configDescOverride = "Full charge time in seconds before attack speed scaling.", configSectionOverride = "Cloaker - Shoot Harder", configNameOverride = "Full Charge Time")]
         [FormatToken(CloakerContent.SECONDARYTOKEN, 1)]
         public static float BaseDuration = 1f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Minimum seconds before releasing a partially charged shot. A full charge can fire sooner.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Minimum seconds before releasing a partially charged shot. A full charge can fire sooner.", configSectionOverride = "Cloaker - Shoot Harder", configNameOverride = "Minimum Charge Time")]
         public static float MinimumChargeDuration = 0.5f;
 
         private float duration;
         private float? cloakedDamage;
-        private CrosshairUtils.OverrideRequest crosshair;
         private uint chargeSoundId;
         private CloakerController controller;
         public override void OnEnter()
@@ -43,7 +41,7 @@ namespace EntityStates.Cloaker.Weapon
             PlayCrossfade("Gesture, Override", controller.GetAnimationStateName("Gesture, Override", "EnterSecondary"),
                 "Secondary.playbackRate", duration, duration * 0.05f);
             chargeSoundId = Util.PlaySound(CloakerAssets.ChargeSound, gameObject);
-            crosshair = CrosshairUtils.RequestOverrideForBody(characterBody, CloakerAssets.ChargeCrosshair, CrosshairUtils.OverridePriority.Skill);
+            characterBody.SetSpreadBloom(0f, false);
             StartAimMode(duration + 2f);
         }
         public override void FixedUpdate()
@@ -60,7 +58,7 @@ namespace EntityStates.Cloaker.Weapon
         public override void Update()
         {
             base.Update();
-            characterBody.SetSpreadBloom(0f);
+            characterBody.SetSpreadBloom(Mathf.Lerp(0f, 1f, Mathf.Clamp01(age / duration)), false);
         }
         public override void OnExit()
         {
@@ -69,7 +67,7 @@ namespace EntityStates.Cloaker.Weapon
                 AkSoundEngine.StopPlayingID(chargeSoundId);
                 chargeSoundId = 0;
             }
-            crosshair?.Dispose();
+            characterBody.SetSpreadBloom(0f, false);
             cloakedDamage = null;
             if (!outer.destroying)
                 PlayAnimation("Gesture, Override", controller.GetAnimationStateName("Gesture, Override", "BufferEmpty"));

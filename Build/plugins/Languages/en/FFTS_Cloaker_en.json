@@ -1,8 +1,14 @@
 {
   "strings": {
+    "ACHIEVEMENT_FFTS_CLOAKERUNLOCK_NAME": "Unseen",
+    "ACHIEVEMENT_FFTS_CLOAKERUNLOCK_DESCRIPTION": "Stay stealthed for 30 seconds without being unstealthed for longer than 4 seconds.",
+    "ACHIEVEMENT_FFTS_CLOAKERAKIMBOUNLOCK_NAME": "Cloaker: Guns Blazing",
+    "ACHIEVEMENT_FFTS_CLOAKERAKIMBOUNLOCK_DESCRIPTION": "As Cloaker, complete a teleporter event without entering stealth once.",
+    "ACHIEVEMENT_FFTS_CLOAKERSCREECHUNLOCK_NAME": "Cloaker: Leaving a Mark",
+    "ACHIEVEMENT_FFTS_CLOAKERSCREECHUNLOCK_DESCRIPTION": "As Cloaker, mark 5 enemies without breaking stealth.",
     "FFTS_CLOAKER_BODY_NAME": "Cloaker",
     "FFTS_CLOAKER_BODY_SUBTITLE": "The Unseen",
-    "FFTS_CLOAKER_DESCRIPTION": "Cloaker uses stealth and precise gunfire to expose vulnerable targets.\n\n<style=cSub>Choose Cloak to ambush enemies, or Akimbo to trade stealth for rapid alternating shots.</style>",
+    "FFTS_CLOAKER_DESCRIPTION": "The Cloaker is a methodical character who uses stealth in order to setup for high damaging strikes that reward kills with gold.<style=cSub>\n\n< ! > You can remain permanently stealthed as long as you avoid running into enemies - make sure to weave through enemies without being detected!\n\n< ! > Your first hit out of stealth is empowered with extra damage so using it with your secondary can lead to powerful bursts of damage.\n\n< ! > Restealth gives an opportunity to stealth without being revealed by enemies. Use it to disengage or aggressively path to priority targets.\n\n< ! > Make sure to combine your highest damage skills with Mark to cash in on its gold reward and skill reset.\n</style>\n",
 
     "FFTS_CLOAKER_PASSIVE_NAME": "Cloak",
     "FFTS_CLOAKER_PASSIVE_DESCRIPTION": "After <style=cIsUtility>{0} seconds out of combat</style>, become invisible and gain movement speed. While invisible, gain <style=cIsDamage>{1}% bonus damage</style>. Shooting, taking damage, or an enemy within <style=cIsUtility>{2}m</style> breaks stealth. Cooldown reduction reduces the delay.",

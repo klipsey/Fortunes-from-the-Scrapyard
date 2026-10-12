@@ -43,7 +43,7 @@ namespace FortunesFromTheScrapyard.Items
                 GenericSkill secondary = skillSlot.characterBody.skillLocator.secondary;
                 GenericSkill utility = skillSlot.characterBody.skillLocator.utility;
                 GenericSkill special = skillSlot.characterBody.skillLocator.special;
-                bool meetsCDRequirement = skillSlot.baseRechargeInterval > 1f && skillSlot.rechargeStock > 0;
+                bool meetsCDRequirement = skillSlot.baseRechargeInterval > 1f && skillSlot.rechargeStock > 0 && skillSlot.skillDef.stockToConsume > 0;
 
                 if (meetsCDRequirement)
                 {

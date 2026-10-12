@@ -19,7 +19,7 @@ namespace EntityStates.Duke
     public class Salvo : BaseSkillState
     {
         public static float baseProcCoefficient = 1f;
-        public static float baseShootDuration = 0.25f;
+        public static float baseShootDuration = 0.1f;
         public static float baseDuration = 1.25f;
         public static float baseForce = 600f;
         public static int bulletCount = 1;
@@ -137,12 +137,12 @@ namespace EntityStates.Duke
                 {
                     if (this.isCrit)
                     {
-                        this.PlayCrossfade("Gesture, Additive", "EnterShootCrit", "Primary.playbackRate", this.windupDuration, this.windupDuration * 0.25f);
+                        this.PlayCrossfade("Gesture, Override", "EnterShootCrit", "Primary.playbackRate", this.windupDuration, this.windupDuration * 0.15f);
                     }
                     else
                     {
                         //Play ShootCrit to Shoot Transition when its done
-                        this.PlayCrossfade("Gesture, Additive", "EnterShoot", "Primary.playbackRate", this.windupDuration, this.windupDuration * 0.25f);
+                        this.PlayCrossfade("Gesture, Override", "EnterShoot", "Primary.playbackRate", this.windupDuration, this.windupDuration * 0.15f);
                     }  
                 }
             }

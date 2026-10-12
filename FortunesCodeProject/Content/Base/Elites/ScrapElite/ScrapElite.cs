@@ -44,9 +44,12 @@ namespace FortunesFromTheScrapyard.Elite
             {
                 if (!(eliteDef is ExtendedEliteDef extendedElite) || !extendedElite.overlayMaterial)
                     throw new InvalidOperationException("Scrap elite requires an ExtendedEliteDef with a hologram overlay material.");
+                if (!extendedElite.eliteRamp)
+                    throw new InvalidOperationException("Scrap elite requires a color ramp for its hologram overlay.");
                 Material overlay = extendedElite.overlayMaterial;
                 if (!overlay.shader || overlay.shader.name.StartsWith("Stubbed", StringComparison.Ordinal))
                     throw new InvalidOperationException("Scrap elite's overlay shader was not resolved by the shared shader loader.");
+                overlay.SetTexture("_RemapTex", extendedElite.eliteRamp);
                 overlay.EnableKeyword("CLOUDOFFSET");
                 overlay.EnableKeyword("FRESNEL");
                 overlay.EnableKeyword("USE_CLOUDS");

@@ -151,10 +151,14 @@ namespace FortunesFromTheScrapyard.Items
 
             double share = experience * GetExperienceMultiplier(teamStacks) / recipients.Count;
             double remainingExperience = 0;
+            bool stageEnding = SceneExitController.isRunning || SceneExitControllerColossusPortal.isRunning;
             foreach (var recipient in recipients)
             {
                 if (recipient.itemCount > 0)
-                    GiveConvertedGold(recipient.master, share);
+                {
+                    if (!stageEnding)
+                        GiveConvertedGold(recipient.master, share);
+                }
                 else
                     remainingExperience += share;
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MSU;
 using R2API;
 using RoR2;
@@ -18,7 +19,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         internal const string ScreamSound = "Play_sfx_cloaker_scream";
         internal const string DashSound = "Play_drifter_repossess_dash";
         internal static NetworkSoundEventDef StealthSound;
-        internal static GameObject RailTracer, RailImpact, ChargeCrosshair, GoldTracer, CritTracer;
+        internal static GameObject RailTracer, RailImpact, GoldTracer, CritTracer;
         internal static GameObject PistolMuzzle, PistolImpact;
         internal static GameObject RangeIndicator, TrackingIndicator, ConsumeEffect, SuccessfulConsumeEffect, ScreechEffect;
 
@@ -31,7 +32,6 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             PistolImpact = LoadAddress<GameObject>("RoR2/Base/Commando/HitsparkCommando.prefab");
             RailTracer = LoadAddress<GameObject>("RoR2/DLC1/Railgunner/TracerRailgun.prefab");
             RailImpact = LoadAddress<GameObject>("RoR2/DLC1/Railgunner/ImpactRailgun.prefab");
-            ChargeCrosshair = LoadAddress<GameObject>("RoR2/Base/Mage/MageCrosshair.prefab");
             RangeIndicator = collection.FindAsset<GameObject>("CloakerRangeIndicator");
             TrackingIndicator = collection.FindAsset<GameObject>("CloakerTrackingIndicator");
             ConsumeEffect = collection.FindAsset<GameObject>("CloakerMarkedConsumeEffect");
@@ -39,6 +39,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             SuccessfulConsumeEffect = collection.FindAsset<GameObject>("CloakerMarkedSuccessfulConsumeEffect");
             ConfigureMarkConsumptionMaterials(ConsumeEffect);
             ConfigureMarkConsumptionMaterials(SuccessfulConsumeEffect);
+            SuccessfulConsumeEffect = CreateMarkKillEffect(SuccessfulConsumeEffect);
             BuffDef markedBuff = collection.FindAsset<BuffDef>("bdCloakerMarked");
             Material markOverlayMaterial = collection.FindAsset<Material>("matCloakerMark");
             if (!markedBuff || !markOverlayMaterial)
@@ -68,6 +69,72 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             }
         }
 
+        private static GameObject CreateMarkKillEffect(GameObject original)
+        {
+            ParticleSystemRenderer[] originalRenderers = original.GetComponentsInChildren<ParticleSystemRenderer>(true);
+            Material palette = originalRenderers.Select(renderer => renderer.sharedMaterial)
+                .FirstOrDefault(material => material && material.name == "matCloakerHitspark");
+            ParticleSystemRenderer[] dollarSigns = originalRenderers.Where(renderer => renderer.sharedMaterial
+                && renderer.sharedMaterial.name == "matCloakerSuccessfulMark").ToArray();
+            if (!palette || dollarSigns.Length == 0)
+                throw new InvalidOperationException("Cloaker's mark kill effect is missing its palette or dollar-sign particles.");
+
+            GameObject banditEffect = LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ImpactEffects/Bandit2ResetEffect");
+            if (!banditEffect)
+                throw new InvalidOperationException("Bandit's Lights Out kill effect failed to load.");
+
+            GameObject effect = banditEffect.InstantiateClone("CloakerMarkKillEffect", false);
+            Color tint = palette.GetColor("_TintColor");
+            Texture ramp = palette.GetTexture("_RemapTex");
+            if (!ramp)
+                throw new InvalidOperationException("Cloaker's mark kill effect palette is missing its color ramp.");
+
+            foreach (ParticleSystemRenderer renderer in effect.GetComponentsInChildren<ParticleSystemRenderer>(true))
+            {
+                Material[] materials = renderer.sharedMaterials;
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    if (!materials[i]) continue;
+                    Material material = new Material(materials[i]);
+                    material.name = $"matCloakerMarkKill_{materials[i].name}";
+                    if (material.HasProperty("_RemapTex"))
+                        material.SetTexture("_RemapTex", ramp);
+                    if (material.HasProperty("_TintColor"))
+                        material.SetColor("_TintColor", tint);
+                    if (material.HasProperty("_EmissionColor"))
+                        material.SetColor("_EmissionColor", tint);
+                    materials[i] = material;
+                }
+                renderer.sharedMaterials = materials;
+            }
+            foreach (Light light in effect.GetComponentsInChildren<Light>(true))
+                light.color = tint;
+
+            Material dollarMaterial = new Material(dollarSigns[0].sharedMaterial);
+            dollarMaterial.name = "matCloakerMarkKillDollar";
+            dollarMaterial.SetTexture("_RemapTex", LoadAddress<Texture2D>("RoR2/DLC1/Common/ColorRamps/texRampGold.png"));
+            dollarMaterial.SetColor("_TintColor", new Color(1f, 0.82f, 0.2f, 1f));
+            foreach (ParticleSystemRenderer dollarSign in dollarSigns)
+            {
+                GameObject dollarSignEffect = UnityEngine.Object.Instantiate(dollarSign.gameObject, effect.transform, false);
+                dollarSignEffect.GetComponent<ParticleSystemRenderer>().sharedMaterial = dollarMaterial;
+                ParticleSystem.MainModule particles = dollarSignEffect.GetComponent<ParticleSystem>().main;
+                particles.startSizeMultiplier *= 2.5f;
+                particles.startSpeedMultiplier *= 3f;
+                particles.startLifetimeMultiplier *= 4f;
+                particles.startColor = Color.white;
+                ParticleSystem.VelocityOverLifetimeModule velocity = dollarSignEffect.GetComponent<ParticleSystem>().velocityOverLifetime;
+                velocity.enabled = true;
+                velocity.x = velocity.y = velocity.z = new ParticleSystem.MinMaxCurve(0f);
+                // (1-t)^3 averages 1/4, keeping travel distance the same over 4x lifetime.
+                velocity.speedModifier = new ParticleSystem.MinMaxCurve(1f,
+                    new AnimationCurve(new Keyframe(0f, 1f, -3f, -3f), new Keyframe(1f, 0f, 0f, 0f)));
+            }
+            effect.GetComponent<EffectComponent>().soundName = original.GetComponent<EffectComponent>().soundName;
+            FFTSContent.CreateAndAddEffectDef(effect);
+            return effect;
+        }
+
         private static void ConfigureMarkConsumptionMaterials(GameObject effect)
         {
             if (!effect)
@@ -82,6 +149,13 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
 
                 material.SetFloat("_CloudsOn", 0f);
                 material.DisableKeyword("USE_CLOUDS");
+                if (material.name == "matCloakerMarkBackdrop")
+                {
+                    material.SetFloat("_DisableRemapOn", 1f);
+                    material.EnableKeyword("DISABLEREMAP");
+                    material.SetFloat("_CalcTextureAlphaOn", 1f);
+                    material.EnableKeyword("CALCTEXTUREALPHA");
+                }
                 material.SetFloat("_VertexColorOn", 1f);
                 material.EnableKeyword("VERTEXCOLOR");
                 material.SetFloat("_DepthOffset", 0f);

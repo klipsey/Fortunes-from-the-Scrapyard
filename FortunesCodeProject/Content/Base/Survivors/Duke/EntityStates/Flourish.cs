@@ -15,8 +15,6 @@ namespace EntityStates.Duke
         private float baseDuration = 0.15f;
         public GameObject selfOnHitOverlayEffectPrefab => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercDashHitOverlay.prefab").WaitForCompletion();
         public float speedCoefficient = 10f;
-
-        private bool hasHit;
         private Vector3 dashVelocity => dashVector * moveSpeedStat * speedCoefficient;
 
         private Vector3 dashVector;
@@ -57,7 +55,7 @@ namespace EntityStates.Duke
             anim.SetFloat("dashR", num2);
             this.slideRotation = Quaternion.LookRotation(this.dashVector, this.characterDirection.forward);
 
-            base.PlayCrossfade("FullBody, Override", "Dash", 0.1f);
+            base.PlayCrossfade("FullBody, Override", "Dash", "Utility.playbackRate", baseDuration, baseDuration * 0.15f);
 
             if (BrotherMonster.BaseSlideState.slideEffectPrefab && base.characterBody)
             {

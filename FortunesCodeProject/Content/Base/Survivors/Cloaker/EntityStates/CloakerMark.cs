@@ -9,8 +9,10 @@ namespace EntityStates.Cloaker
 {
     public class CloakerMark : BaseSkillState
     {
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 5f, configDescOverride = "Mark animation duration in seconds before attack speed scaling.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 5f, configDescOverride = "Mark animation duration in seconds before attack speed scaling.", configSectionOverride = "Cloaker - Target", configNameOverride = "Activation Duration")]
         public static float BaseDuration = 0.5f;
+
+        public static event System.Action<CharacterBody> onAuthorityMarkCast;
 
         private HurtBox victim;
         private float duration;
@@ -25,6 +27,7 @@ namespace EntityStates.Cloaker
                 if (isAuthority) outer.SetNextStateToMain();
                 return;
             }
+            if (isAuthority) onAuthorityMarkCast?.Invoke(characterBody);
             StartAimMode(duration);
             string animation = GetComponent<CloakerController>().GetAnimationStateName("Gesture, Override", "Special2");
             PlayCrossfade("Gesture, Override", animation, "Special.playbackRate", duration, duration * 0.5f);

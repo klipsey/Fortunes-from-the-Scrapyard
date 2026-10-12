@@ -88,6 +88,11 @@ namespace FortunesFromTheScrapyard.Equipments
 
         private void HealthComponent_TakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
         {
+            if (!self || !self.body || damageInfo == null)
+            {
+                orig(self, damageInfo);
+                return;
+            }
             CharacterBody attackerBody = null;
             if (damageInfo.attacker) attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
             MoonshineBehaviour moonshineComponent = null;
@@ -95,7 +100,7 @@ namespace FortunesFromTheScrapyard.Equipments
 
             if (attackerBody && damageInfo.attacker && moonshineComponent && (damageInfo.dotIndex & DotController.DotIndex.None) != 0 && !damageInfo.procChainMask.HasModdedProc(FFTSContent.ProcType.MoonshineFlask))
             {
-                if (attackerBody.HasBuff(FFTSContent.Buffs.bdMoonshineFlask) && !Util.CheckRoll(Util.ConvertAmplificationPercentageIntoReductionPercentage(chanceToHit / attackerBody.GetBuffCount(FFTSContent.Buffs.bdMoonshineFlask)), attackerBody.master.luck))
+                if (attackerBody.HasBuff(FFTSContent.Buffs.bdMoonshineFlask) && !Util.CheckRoll(Util.ConvertAmplificationPercentageIntoReductionPercentage(chanceToHit / attackerBody.GetBuffCount(FFTSContent.Buffs.bdMoonshineFlask)), attackerBody.master))
                 {
                     EffectManager.SpawnEffect(effectData: new EffectData
                     {

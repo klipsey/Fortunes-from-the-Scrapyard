@@ -7,6 +7,7 @@ using FortunesFromTheScrapyard.Characters.DukeDecoy.Components;
 using R2API;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
+using FortunesFromTheScrapyard.Survivors.Duke.Components;
 
 
 namespace FortunesFromTheScrapyard.Characters.DukeDecoy
@@ -19,6 +20,7 @@ namespace FortunesFromTheScrapyard.Characters.DukeDecoy
         public override void Initialize()
         {
             DukeDecoyMaster = assetCollection.FindAsset<GameObject>("DukeDecoyMaster");
+            characterPrefab.EnsureComponent<DukeController>();
 
             var cb = characterPrefab.GetComponent<CharacterBody>();
             cb._defaultCrosshairPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/Bandit2Crosshair");

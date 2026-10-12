@@ -116,7 +116,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RemapTex:
-        m_Texture: {fileID: 2800000, guid: 9704b1fe609e7c2408ba11d2d27bc107, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0e901df432ea86741a6db5f369a8edd7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SliceAlphaTex:

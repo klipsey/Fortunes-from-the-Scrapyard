@@ -25,12 +25,12 @@
     
 	"FFTS_ITEM_LETHALINJECTION_NAME": "Lethal Injection",
 	"FFTS_ITEM_LETHALINJECTION_PICKUP": "Chance to inject enemies, permanently increasing their execute threshold.",
-    "FFTS_ITEM_LETHALINJECTION_DESCRIPTION": "<style=cIsDamage>{0}%</style> chance to <style=cIsDamage>inject</style> an enemy on hit for <style=cIsDamage>{1}s</style>. Increases <style=cIsDamage>execute threshold</style> by <style=cIsDamage>{2}% <style=cStack>(+{3}% per stack)</style> x every UNIQUE damage of time effect per second</style>.",
+    "FFTS_ITEM_LETHALINJECTION_DESCRIPTION": "<style=cIsDamage>15%</style> chance to <style=cIsDamage>inject</style> an enemy for <style=cIsDamage>3s</style>, increasing <style=cIsDamage>execute threshold</style> every second by <style=cIsDamage>1% <style=cStack>(+0.5% per stack)</style></style> for each <style=cIsUtility>unique</style> damage over time effect active.",
     "FFTS_ITEM_LETHALINJECTION_LORE": "Soldiers are given three simple things when they hit the battlefield: a uniform, a weapon, and a metal case. One to remind you of your duty, another to remind you of your strength, and the last to remind you of what happens when you fail.\n\nThe case is for the weak with no more sense of duty. Beats dying from the local wildlife, or worse.",
     
 	"FFTS_ITEM_COUNTERFEITCURRENCY_NAME": "Counterfeit Currency",
     "FFTS_ITEM_COUNTERFEITCURRENCY_PICKUP": "Purchases grant experience... <color=#FF7F7F>BUT experience is reduced and your share becomes gold.</color>",
-    "FFTS_ITEM_COUNTERFEITCURRENCY_DESCRIPTION": "Gain <style=cIsUtility>0.5 experience</style> per gold spent <style=cStack>(+0.5 per stack)</style>, but all experience is reduced by <style=cIsHealth>25%</style> <style=cStack>(compounds per stack)</style> and your share is converted to gold.",
+    "FFTS_ITEM_COUNTERFEITCURRENCY_DESCRIPTION": "Directly gain <style=cIsUtility>0.5 experience</style> per gold spent <style=cStack>(+0.5 per stack)</style>, but all experience is converted to gold. All experience gains are reduced by <style=cIsHealth>25%</style> <style=cStack>(-25% per stack)</style>.",
     "FFTS_ITEM_COUNTERFEITCURRENCY_LORE": "The sound of slot machines around, the constant thrill of wasting your life savings yet again. It’s a problem, you know that. However, as you sit across from the chairman, those problems seem trivial...\n\n\"400 on red!\" you exclaim just before the alarm begins to screech. It’s time to run. As the doors begin locking around you, doubt settles in. Where is the goddamn exit? Your mind is in disarray, yet you remain collected, standing in front of the judge, jury, and executioner of Triton's Reach.\n\n\"The exit is the least of your worries. 400, was it?\"",
     
 	"FFTS_ITEM_SPRAYCAN_NAME": "Spray Can",

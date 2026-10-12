@@ -17,6 +17,8 @@ using RoR2.Skills;
 using MSU.Config;
 using R2API.Networking.Interfaces;
 using FortunesFromTheScrapyard.Ricochet;
+using FortunesFromTheScrapyard.Survivors.Duke.Skills;
+using System.Linq;
 
 namespace FortunesFromTheScrapyard.Survivors.Duke
 {
@@ -27,19 +29,19 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
         public const string MINETOKEN = "FFTS_DUKE_KINETIC_DESC";
         public const string CLONETOKEN = "FFTS_DUKE_CLONE_DESC";
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Duke - Salvo", configNameOverride = "Damage Coefficient")]
         [FormatToken(SALVOTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float baseSalvoDamageCoefficient = 3.75f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, restartRequired = true, configSectionOverride = "Duke - Kinetic Replicator", configNameOverride = "Damage Share Coefficient")]
         [FormatToken(MINETOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         internal static float damageShareCoefficient = 1.05f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, restartRequired = true, configSectionOverride = "Duke - Pretentious Mimicry", configNameOverride = "Damage Coefficient")]
         [FormatToken(CLONETOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float baseCloneDamageCoefficient = 5f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Duke - Liquidate", configNameOverride = "Damage Coefficient")]
         [FormatToken(SALVOTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float baseFanDamageCoefficient = 3f;
 
@@ -84,6 +86,8 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
 
             CreateUI();
 
+            CreateSkills();
+
             ModifyPrefab();
 
             Hooks();
@@ -94,6 +98,60 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
             var cb = characterPrefab.GetComponent<CharacterBody>();
             cb.preferredPodPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod");
             cb._defaultCrosshairPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Crosshair/Bandit2Crosshair");
+
+            var commando = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion();
+            var commandoCamera = commando.GetComponent<CameraTargetParams>();
+            var camera = characterPrefab.GetComponent<CameraTargetParams>();
+            camera.cameraParams = commandoCamera.cameraParams;
+            camera.dontRaycastToPivot = commandoCamera.dontRaycastToPivot;
+            var pivot = commandoCamera.cameraPivotTransform
+                ? commandoCamera.cameraPivotTransform
+                : commando.GetComponent<CharacterBody>().aimOriginTransform;
+            camera.cameraPivotTransform.localPosition = pivot
+                ? commando.transform.InverseTransformPoint(pivot.position)
+                : Vector3.zero;
+        }
+
+        public override void CreateSkills()
+        {
+            var skills = characterPrefab.GetComponent<SkillLocator>();
+            var salvo = (DukeReloadSkillDef)skills.primary.skillFamily.variants[0].skillDef;
+            salvo.skillName = "Salvo";
+            salvo.skillNameToken = "FFTS_DUKE_SALVO_NAME";
+            salvo.skillDescriptionToken = SALVOTOKEN;
+            salvo.icon = primaryIcon;
+            salvo.activationStateMachineName = "Weapon";
+            salvo.activationState = new SerializableEntityStateType(typeof(EntityStates.Duke.Salvo));
+            salvo.interruptPriority = InterruptPriority.Skill;
+            salvo.baseRechargeInterval = 0f;
+            salvo.baseMaxStock = 4;
+            salvo.rechargeStock = 0;
+            salvo.requiredStock = 1;
+            salvo.stockToConsume = 1;
+            salvo.dontAllowPastMaxStocks = true;
+            salvo.reloadState = new SerializableEntityStateType(typeof(EntityStates.Duke.EnterReload));
+            salvo.reloadInterruptPriority = InterruptPriority.Any;
+            salvo.graceDuration = 0.05f;
+            salvo.primaryIcon = primaryIcon;
+            salvo.secondaryIcon = primaryEmpoweredIcon;
+
+            var liquidate = (DukeFanTheHammerSkillDef)skills.special.skillFamily.variants
+                .Single(variant => variant.skillDef is DukeFanTheHammerSkillDef).skillDef;
+            liquidate.skillName = "FanTheHammer";
+            liquidate.skillNameToken = "FFTS_DUKE_FANHAMMER_NAME";
+            liquidate.skillDescriptionToken = "FFTS_DUKE_FANHAMMER_DESC";
+            liquidate.icon = FFTSAssets.LoadAsset<Sprite>("iconDukeSpecial2", FFTSBundle.Survivors);
+            liquidate.activationStateMachineName = "Weapon";
+            liquidate.activationState = new SerializableEntityStateType(typeof(EntityStates.Duke.FanTheHammer));
+            liquidate.interruptPriority = InterruptPriority.PrioritySkill;
+            liquidate.baseRechargeInterval = 9f;
+            liquidate.baseMaxStock = 1;
+            liquidate.rechargeStock = 1;
+            liquidate.requiredStock = 1;
+            liquidate.stockToConsume = 1;
+            liquidate.beginSkillCooldownOnSkillEnd = true;
+            liquidate.cancelSprintingOnActivation = true;
+            liquidate.canceledFromSprinting = true;
         }
         public override bool IsAvailable(ContentPack contentPack)
         {
@@ -318,8 +376,8 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
         #region UI
         private void CreateUI()
         {
-            primaryIcon = assetCollection.FindAsset<Sprite>("iconDukePrimary");
-            primaryEmpoweredIcon = assetCollection.FindAsset<Sprite>("iconDukePrimaryEmpower");
+            primaryIcon = FFTSAssets.LoadAsset<Sprite>("iconDukePrimary", FFTSBundle.Survivors);
+            primaryEmpoweredIcon = FFTSAssets.LoadAsset<Sprite>("iconDukePrimaryEmpower", FFTSBundle.Survivors);
         }
         #endregion
         private void Hooks()

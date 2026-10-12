@@ -59,6 +59,8 @@ namespace EntityStates.Duke
 
         public override void OnEnter()
         {
+            base.OnEnter();
+
             this.skillLocator.primary.stock = this.skillLocator.primary.maxStock;
             this.dukeController = base.gameObject.GetComponent<DukeController>();
 
@@ -75,8 +77,6 @@ namespace EntityStates.Duke
             this.isCrit = RollCrit();
             this.falloff = BulletAttack.FalloffModel.DefaultBullet;
             this.damageType = DamageType.Generic;
-
-            base.OnEnter();
 
             this.maxShotCount = this.skillLocator.primary.GetBaseMaxStock() + characterBody.GetBuffCount(FFTSContent.Buffs.bdDukeFreeShot);
 
@@ -132,7 +132,7 @@ namespace EntityStates.Duke
             {
                 base.PlayCrossfade("FullBody, Override", "ShootFan", "Special.playbackRate", this.windupDuration, 0.05f);
             }
-            else base.PlayCrossfade("Gesture, Additive", "ShootFan", "Special.playbackRate", this.windupDuration, 0.05f);
+            else base.PlayCrossfade("Gesture, Override", "ShootFan", "Special.playbackRate", this.windupDuration, 0.05f);
 
             Util.PlaySound(this.shootSoundString, this.gameObject);
 
@@ -192,7 +192,7 @@ namespace EntityStates.Duke
 
         public void ResetShot()
         {
-            this.damageCoefficient = DukeSurvivor.baseSalvoDamageCoefficient;
+            this.damageCoefficient = DukeSurvivor.baseFanDamageCoefficient * (1f + dukeController.attackSpeedConversion);
             this.procCoefficient = baseProcCoefficient;
             this.force = baseForce;
             this.bulletSpread = baseBulletSpread;

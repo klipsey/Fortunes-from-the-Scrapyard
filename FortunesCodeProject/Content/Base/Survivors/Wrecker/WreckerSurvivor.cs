@@ -32,19 +32,19 @@ namespace FortunesFromTheScrapyard.Survivors.Wrecker
         public const string UTILITYTOKEN = "FFTS_WRECKER_UTILITY_DESCRIPTION";
         public const string SPECIALTOKEN = "FFTS_WRECKER_SPECIAL_DESCRIPTION";
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Wrecker - Pace Maker", configNameOverride = "Damage Coefficient")]
         //[FormatToken(PRIMARYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float basePrimaryDamage = 0.6f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Wrecker - Crashout", configNameOverride = "Damage Coefficient")]
         //[FormatToken(SECONDARYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 1)]
         internal static float baseSecondaryDamage = 1.2f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Wrecker - SCREEEEEEAM", configNameOverride = "Damage Coefficient")]
         //[FormatToken(UTILITYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 2)]
         public static float baseUtilityDamage = 4f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, restartRequired = true)]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, restartRequired = true, configSectionOverride = "Wrecker - Encore", configNameOverride = "Damage Coefficient")]
         //[FormatToken(SPECIALTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 3)]
         public static float baseSpecialDamage = 6f;
 
@@ -224,6 +224,11 @@ namespace FortunesFromTheScrapyard.Survivors.Wrecker
 
         private static void HealthComponent_TakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
+            if (!self || !self.body || damageInfo == null)
+            {
+                orig(self, damageInfo);
+                return;
+            }
             if (NetworkServer.active && self.alive || !self.godMode || self.ospTimer <= 0f)
             {
                 CharacterBody victimBody = self.body;
@@ -285,7 +290,7 @@ namespace FortunesFromTheScrapyard.Survivors.Wrecker
             CharacterBody victimBody = damageReport.victimBody;
             EntityStateMachine victimMachine = victimBody.GetComponent<EntityStateMachine>();
             CharacterBody attackerBody = damageReport.attackerBody;
-            GameObject attackerObject = damageReport.attacker.gameObject;
+            GameObject attackerObject = attackerBody.gameObject;
             WreckerController iController = attackerBody.GetComponent<WreckerController>();
             if (NetworkServer.active)
             {

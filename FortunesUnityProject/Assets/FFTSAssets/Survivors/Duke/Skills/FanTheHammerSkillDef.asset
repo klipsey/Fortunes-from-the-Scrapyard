@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 2105105017, guid: b1595d7707f65be48af3202912a6f2cd, type: 3}
   m_Name: FanTheHammerSkillDef
   m_EditorClassIdentifier: 
-  skillName: 
-  skillNameToken: 
-  skillDescriptionToken: 
+  skillName: FanTheHammer
+  skillNameToken: FFTS_DUKE_FANHAMMER_NAME
+  skillDescriptionToken: FFTS_DUKE_FANHAMMER_DESC
   keywordTokens: []
-  icon: {fileID: 0}
-  activationStateMachineName: 
+  icon: {fileID: 21300000, guid: 99806e1bdb5eb61458094026c1dfb55b, type: 3}
+  activationStateMachineName: Weapon
   activationState:
-    _typeName: 
-  interruptPriority: 1
-  baseRechargeInterval: 1
+    _typeName: EntityStates.Duke.FanTheHammer, FortunesFromTheScrapyard, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  interruptPriority: 2
+  baseRechargeInterval: 9
   baseMaxStock: 1
   rechargeStock: 1
   requiredStock: 1
@@ -31,11 +32,11 @@ MonoBehaviour:
   resetCooldownTimerOnUse: 0
   fullRestockOnAssign: 1
   dontAllowPastMaxStocks: 0
-  beginSkillCooldownOnSkillEnd: 0
+  beginSkillCooldownOnSkillEnd: 1
   isCooldownBlockedUntilManuallyReset: 0
   cancelSprintingOnActivation: 1
   forceSprintDuringState: 0
-  canceledFromSprinting: 0
+  canceledFromSprinting: 1
   isCombatSkill: 1
   mustKeyPress: 0
   triggeredByPressRelease: 0

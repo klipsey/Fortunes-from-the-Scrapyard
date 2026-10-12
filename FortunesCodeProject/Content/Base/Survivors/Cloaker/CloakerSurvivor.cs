@@ -24,11 +24,11 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         public const string SCREECHTOKEN = "FFTS_CLOAKER_SPECIAL2_DESCRIPTION";
         public const string MARKKEYWORDTOKEN = "FFTS_CLOAKER_MARK_KEYWORD";
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Damage bonus for the next attack that breaks stealth. 1.5 grants 150% bonus damage.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Damage bonus for the next attack that breaks stealth. 1.5 grants 150% bonus damage.", configSectionOverride = "Cloaker - Cloak", configNameOverride = "Stealth Attack Damage Bonus")]
         [FormatToken(PASSIVETOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 1)]
         public static float CloakDamageBonus = 1.5f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Additive attack speed bonus with Akimbo. 1.5 grants 150% bonus attack speed.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 10f, configDescOverride = "Additive attack speed bonus with Akimbo. 1.5 grants 150% bonus attack speed.", configSectionOverride = "Cloaker - Akimbo", configNameOverride = "Attack Speed Bonus")]
         [FormatToken(AKIMBOTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float AkimboAttackSpeedBonus = 1.5f;
 
@@ -36,7 +36,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         [FormatToken(MARKKEYWORDTOKEN, 2)]
         private const float MarkDescriptionReapplyDelay = 5f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, configDescOverride = "Total damage multiplier for Mark. The triggering hit stays unchanged; Mark deals the additional damage as a separate hit.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, configDescOverride = "Total damage multiplier for Mark. The triggering hit stays unchanged; Mark deals the additional damage as a separate hit.", configSectionOverride = "Cloaker - Target", configNameOverride = "Mark Damage Multiplier")]
         [FormatToken(MARKTOKEN, 1)]
         [FormatToken(MARKKEYWORDTOKEN, 1)]
         public static float MarkDamageMultiplier = 2f;
@@ -45,30 +45,30 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         [FormatToken(MARKKEYWORDTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 3)]
         private const float MarkDescriptionDamageCoefficient = 4f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Stealth duration for the attacker who kills a target with a Mark-consuming hit.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Stealth duration for the attacker who kills a target with a Mark-consuming hit.", configSectionOverride = "Cloaker - Target", configNameOverride = "Kill Reward Stealth Duration")]
         [FormatToken(MARKTOKEN, 4)]
         [FormatToken(MARKKEYWORDTOKEN, 4)]
         public static float MarkKillStealthDuration = 4f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 120f, restartRequired = true, configDescOverride = "Mark's recharge time in seconds. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 120f, restartRequired = true, configDescOverride = "Mark's recharge time in seconds. Requires a restart.", configSectionOverride = "Cloaker - Target", configNameOverride = "Cooldown")]
         public static float MarkSkillCooldown = 8f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 60f, restartRequired = true, configDescOverride = "Shoot Harder's recharge time in seconds. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 60f, restartRequired = true, configDescOverride = "Shoot Harder's recharge time in seconds. Requires a restart.", configSectionOverride = "Cloaker - Shoot Harder", configNameOverride = "Cooldown")]
         public static float SecondaryCooldown = 4f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 60f, restartRequired = true, configDescOverride = "Restealth's recharge time in seconds. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 60f, restartRequired = true, configDescOverride = "Restealth's recharge time in seconds. Requires a restart.", configSectionOverride = "Cloaker - Restealth", configNameOverride = "Cooldown")]
         public static float UtilityCooldown = 7f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 120f, restartRequired = true, configDescOverride = "Screech's recharge time in seconds. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 120f, restartRequired = true, configDescOverride = "Screech's recharge time in seconds. Requires a restart.", configSectionOverride = "Cloaker - Screech", configNameOverride = "Cooldown")]
         public static float ScreechCooldown = 8f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, restartRequired = true, configDescOverride = "Shoot Harder's maximum stock. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, restartRequired = true, configDescOverride = "Shoot Harder's maximum stock. Requires a restart.", configSectionOverride = "Cloaker - Shoot Harder", configNameOverride = "Maximum Stock")]
         public static int SecondaryStock = 1;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, restartRequired = true, configDescOverride = "Restealth's maximum stock. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, restartRequired = true, configDescOverride = "Restealth's maximum stock. Requires a restart.", configSectionOverride = "Cloaker - Restealth", configNameOverride = "Maximum Stock")]
         public static int UtilityStock = 1;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, restartRequired = true, configDescOverride = "Screech's maximum stock. Requires a restart.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 10f, restartRequired = true, configDescOverride = "Screech's maximum stock. Requires a restart.", configSectionOverride = "Cloaker - Screech", configNameOverride = "Maximum Stock")]
         public static int ScreechStock = 1;
 
         public static DamageAPI.ModdedDamageType CloakerChargedDamageType;
@@ -116,6 +116,21 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             markBonusDamageType = DamageAPI.ReserveDamageType();
             markDamageColor = ColorsAPI.RegisterDamageColor(new Color32(0x91, 0x79, 0xB9, 0xFF));
             CloakerAssets.Initialize(assetCollection);
+            UnlockableDef unlockable = ScriptableObject.CreateInstance<UnlockableDef>();
+            unlockable.cachedName = Unlocks.Cloaker.CloakerUnlockAchievement.UnlockableIdentifier;
+            unlockable.nameToken = "FFTS_CLOAKER_BODY_NAME";
+            if (!(characterPrefab.GetComponent<CharacterBody>().portraitIcon is Texture2D portrait))
+                throw new InvalidOperationException("Cloaker's unlock achievement requires a portrait texture.");
+            unlockable.achievementIcon = Sprite.Create(portrait, new Rect(0f, 0f, portrait.width, portrait.height),
+                new Vector2(0.5f, 0.5f));
+            FFTSContent.fftsContentPack.unlockableDefs.AddSingle(unlockable);
+            survivorDef.unlockableDef = unlockable;
+            AddSkillUnlock(characterPrefab.GetComponent<CloakerController>().passiveSkillSlot.skillFamily,
+                characterPrefab.GetComponent<CloakerController>().passiveAkimboSkillDef,
+                Unlocks.Cloaker.CloakerAkimboAchievement.UnlockableIdentifier);
+            SkillFamily special = characterPrefab.GetComponent<SkillLocator>().special.skillFamily;
+            AddSkillUnlock(special, special.variants.Single(variant => variant.skillDef.skillDescriptionToken == SCREECHTOKEN).skillDef,
+                Unlocks.Cloaker.CloakerScreechAchievement.UnlockableIdentifier);
             ModifyPrefab();
             FFTSMain.instance.StartCoroutine(ConfigureSkills());
             On.RoR2.SurvivorCatalog.Init += SurvivorCatalog_Init;
@@ -128,8 +143,21 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             RecalculateStatsAPI.GetStatCoefficients += RecalculateStats;
         }
 
+        private static void AddSkillUnlock(SkillFamily family, SkillDef skill, string identifier)
+        {
+            UnlockableDef unlockable = ScriptableObject.CreateInstance<UnlockableDef>();
+            unlockable.cachedName = identifier;
+            unlockable.nameToken = skill.skillNameToken;
+            unlockable.achievementIcon = skill.icon;
+            FFTSContent.fftsContentPack.unlockableDefs.AddSingle(unlockable);
+            int index = Array.FindIndex(family.variants, variant => variant.skillDef == skill);
+            if (index < 0) throw new InvalidOperationException($"Cloaker skill {skill.skillNameToken} was not found in its family.");
+            family.variants[index].unlockableDef = unlockable;
+        }
+
         public void ModifyPrefab()
         {
+            characterPrefab.GetComponent<CharacterBody>().bodyColor = new Color32(60, 60, 68, 255);
             CameraTargetParams camera = characterPrefab.GetComponent<CameraTargetParams>();
             if (!camera.cameraParams)
                 camera.cameraParams = CloakerAssets.LoadAddress<CharacterCameraParams>("RoR2/Base/Common/ccpStandard.asset");
@@ -138,6 +166,11 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             characterPrefab.GetComponent<ModelLocator>().modelTransform.GetComponent<FootstepHandler>().footstepDustPrefab =
                 CloakerAssets.LoadAddress<GameObject>("RoR2/Base/Common/VFX/GenericFootstepDust.prefab");
             CloakerAssets.ConfigureAudio(characterPrefab);
+
+            ModelSkinController skinController = characterPrefab.GetComponent<ModelLocator>().modelTransform.GetComponent<ModelSkinController>();
+            skinController.skins[0].icon = Skins.CreateSkinIcon(new Color(145f / 255f, 121f / 255f, 185f / 255f),
+                new Color(60f / 255f, 45f / 255f, 58f / 255f), new Color(27f / 255f, 27f / 255f, 32f / 255f),
+                new Color(191f / 255f, 84f / 255f, 1f));
         }
 
         private IEnumerator ConfigureSkills()
@@ -192,7 +225,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
                 && consumption.victim == report.victim && consumption.attacker == report.attackerBody)
                 consumption.Consume(report);
             if (report.attackerBody && report.damageInfo.HasModdedDamageType(CloakerScreechDamageType)
-                && victim.healthComponent.alive)
+                && victim.healthComponent && victim.healthComponent.alive)
             {
                 if (!victim.HasBuff(FFTSContent.Buffs.bdCloakerMarked))
                     victim.AddBuff(FFTSContent.Buffs.bdCloakerMarked);
@@ -203,7 +236,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
 
         private void TakeDamage(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo info)
         {
-            if (!NetworkServer.active || !self.body || !info.attacker
+            if (!NetworkServer.active || !self || !self.body || info == null || !info.attacker
                 || !info.attacker.TryGetComponent(out CharacterBody attacker)
                 || !self.body.HasBuff(FFTSContent.Buffs.bdCloakerMarked) || markConsumptions.ContainsKey(info))
             {
@@ -215,7 +248,7 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
             try
             {
                 orig(self, info);
-                if (consumption.consumed && self && self.alive && consumption.bonusDamage > 0f)
+                if (consumption.consumed && self && self.body && self.alive && consumption.bonusDamage > 0f)
                 {
                     DamageInfo bonus = new DamageInfo
                     {
@@ -279,8 +312,11 @@ namespace FortunesFromTheScrapyard.Survivors.Cloaker
         private void CompleteMarkConsumption(MarkConsumption consumption)
         {
             if (!NetworkServer.active) return;
-            EffectManager.SimpleImpactEffect(consumption.killed ? CloakerAssets.SuccessfulConsumeEffect : CloakerAssets.ConsumeEffect,
-                consumption.info.position, Vector3.up, true);
+            if (consumption.killed)
+                EffectManager.SpawnEffect(CloakerAssets.SuccessfulConsumeEffect,
+                    new EffectData { origin = consumption.info.position }, true);
+            else
+                EffectManager.SimpleImpactEffect(CloakerAssets.ConsumeEffect, consumption.info.position, Vector3.up, true);
             CharacterBody attacker = consumption.attacker;
             if (!consumption.killed || !attacker || !attacker.healthComponent || !attacker.healthComponent.alive) return;
             attacker.AddTimedBuff(RoR2Content.Buffs.Cloak, MarkKillStealthDuration);

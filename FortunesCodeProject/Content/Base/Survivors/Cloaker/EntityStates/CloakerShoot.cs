@@ -14,23 +14,23 @@ namespace EntityStates.Cloaker.Weapon
 {
     public class CloakerShoot : BaseSkillState, SteppedSkillDef.IStepSetter
     {
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, configDescOverride = "Primary bullet damage coefficient. 2.8 deals 280% damage.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, configDescOverride = "Primary bullet damage coefficient. 2.8 deals 280% damage.", configSectionOverride = "Cloaker - Shoot", configNameOverride = "Damage Coefficient")]
         [FormatToken(CloakerContent.PRIMARYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]
         public static float PrimaryDamageCoefficient = 2.8f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 5f, configDescOverride = "Shot duration in seconds before attack speed scaling.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 5f, configDescOverride = "Shot duration in seconds before attack speed scaling.", configSectionOverride = "Cloaker - Shoot", configNameOverride = "Shot Duration")]
         public static float BaseDuration = 0.4f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 5000f, configDescOverride = "Maximum bullet travel distance in meters, for primary and charged shots.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 1f, 5000f, configDescOverride = "Maximum bullet travel distance in meters, for primary and charged shots.", configSectionOverride = "Cloaker - Shared Shooting", configNameOverride = "Maximum Bullet Range")]
         public static float MaxDistance = 2000f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5000f, configDescOverride = "Bullet knockback force, for primary and charged shots.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5000f, configDescOverride = "Bullet knockback force, for primary and charged shots.", configSectionOverride = "Cloaker - Shared Shooting", configNameOverride = "Bullet Knockback Force")]
         public static float Force = 200f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5f, configDescOverride = "Bullet proc coefficient, for primary and charged shots.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5f, configDescOverride = "Bullet proc coefficient, for primary and charged shots.", configSectionOverride = "Cloaker - Shared Shooting", configNameOverride = "Bullet Proc Coefficient")]
         public static float ProcCoefficient = 1f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5f, configDescOverride = "Bullet hit radius in meters, for primary and charged shots.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5f, configDescOverride = "Bullet hit radius in meters, for primary and charged shots.", configSectionOverride = "Cloaker - Shared Shooting", configNameOverride = "Bullet Hit Radius")]
         public static float Radius = 0.75f;
 
         public float damageCoefficient = PrimaryDamageCoefficient;
@@ -63,7 +63,8 @@ namespace EntityStates.Cloaker.Weapon
             EffectManager.SimpleMuzzleFlash(CloakerAssets.PistolMuzzle, gameObject, muzzle, false);
             Util.PlaySound(charged ? CloakerAssets.ChargedShotSound : CloakerAssets.ShotSound, gameObject);
             if (isAuthority) Fire();
-            characterBody.AddSpreadBloom(1.25f);
+            if (!charged)
+                characterBody.AddSpreadBloom(1.25f);
         }
 
         private void Fire()

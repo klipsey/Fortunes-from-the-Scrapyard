@@ -12,21 +12,20 @@ namespace EntityStates.Cloaker
 {
     public class CloakerRestealth : BaseSkillState
     {
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 5f, configDescOverride = "Dash and invincibility duration in seconds.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0.01f, 5f, configDescOverride = "Dash and invincibility duration in seconds.", configSectionOverride = "Cloaker - Restealth", configNameOverride = "Dash and Invulnerability Duration")]
         [FormatToken(CloakerContent.UTILITYTOKEN, 0)]
         public static float Duration = 0.3f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 3f, configDescOverride = "Dash speed coefficient, scaled by jump power and movement speed.")]
-        public static float SpeedCoefficient = 0.4f;
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 100f, configDescOverride = "Dash speed at base movement speed, scaled by current movement speed.", configSectionOverride = "Cloaker - Restealth", configNameOverride = "Dash Speed Coefficient")]
+        public static float SpeedCoefficient = 25f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5f, configDescOverride = "Additive attack speed bonus granted by Restealth with Akimbo. 0.15 grants 15%.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 5f, configDescOverride = "Additive attack speed bonus granted by Restealth with Akimbo. 0.15 grants 15%.", configSectionOverride = "Cloaker - Restealth", configNameOverride = "Akimbo Attack Speed Bonus")]
         [FormatToken(CloakerContent.UTILITYTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 2)]
         public static float AkimboAttackSpeedBonus = 0.15f;
 
-        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Duration of Restealth's Akimbo attack speed bonus in seconds.")]
+        [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 30f, configDescOverride = "Duration of Restealth's Akimbo attack speed bonus in seconds.", configSectionOverride = "Cloaker - Restealth", configNameOverride = "Akimbo Attack Speed Duration")]
         [FormatToken(CloakerContent.UTILITYTOKEN, 3)]
         public static float AkimboAttackSpeedDuration = 4f;
-
         private Vector3 forwardDirection;
         private float speed;
         private CameraTargetParams.AimRequest cameraRequest;
@@ -50,7 +49,7 @@ namespace EntityStates.Cloaker
             PlayCrossfade("FullBody, Override", controller.GetAnimationStateName("FullBody, Override", "Dash"),
                 "Utility.playbackRate", Duration * 4f, 0.05f);
             Util.PlaySound(CloakerAssets.DashSound, gameObject);
-            speed = SpeedCoefficient * characterBody.jumpPower * Mathf.Clamp(characterBody.moveSpeed / 4f, 5f, 20f);
+            speed = SpeedCoefficient * (characterBody.moveSpeed / characterBody.baseMoveSpeed);
 
             if (isAuthority && characterMotor && characterDirection)
             {

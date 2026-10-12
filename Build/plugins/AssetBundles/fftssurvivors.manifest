@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2800186114
+CRC: 75110545
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a1426f8e8412ac227425ea6ff2d9344e
+    Hash: 45d1bd2968e2b343e77405f7cac429e4
   TypeTreeHash:
     serializedVersion: 2
     Hash: 57d7c0e9c198ed09edc538d90fbe957a
@@ -340,6 +340,7 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Ascend.fbx
 - Assets/FFTSAssets/Survivors/Duke/Skills/KineticReplicatorSkillDef.asset
 - Assets/FFTSAssets/Survivors/Wrecker/Projectiles/matWreckerDiskRing.mat
+- Assets/FFTSAssets/Survivors/VoidFiend/WHITEKNIGHTRAMP.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/cloakerAimMask.mask
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeGunEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerHitspark.mat
@@ -347,16 +348,19 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeEmission.png
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/skinDukeDecoyDefault.asset
+- Assets/FFTSAssets/Survivors/Railgunner/matRailGunnerGunArcher.mat
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeGunNormals.png
 - Assets/FFTSAssets/Survivors/Duke/Skills/iconDukeSpecial2.png
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/Wrecker_Passive.png
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeMonsoonEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Skill_Secondary_Start_Dual.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/texCloakerPortrait.png
+- Assets/FFTSAssets/Survivors/Railgunner/matRailGunnerMetalArcher.mat
 - Assets/FFTSAssets/Survivors/Duke/Assets/DukeDefaultSkin.png
 - Assets/FFTSAssets/Survivors/Wrecker/wrecker_emoteskeleton.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunL_Dual.fbx
 - Assets/FFTSAssets/Survivors/Duke/DukeDisplay.prefab
+- Assets/FFTSAssets/Survivors/thumbsgup.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Jump.fbx
 - Assets/FFTSAssets/Survivors/Wrecker/WreckerPitch.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunBL_Dual.fbx
@@ -392,13 +396,16 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/Skills/DukePrimarySkillFamily.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@SkillPrimary_Dual01.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_03_normal.png
-- Assets/FFTSAssets/Survivors/Wrecker/Projectiles/mdlDisk.prefab
+- Assets/FFTSAssets/Survivors/VoidFiend/Material.001_BaseColor.png
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_03_diffuse.png
 - Assets/FFTSAssets/Survivors/Duke/Skills/DukePassiveSkillFamily.asset
+- Assets/FFTSAssets/Survivors/VoidFiend/Material.001_Normal.png
 - Assets/FFTSAssets/Survivors/Duke/Skills/iconDukeSpecial.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunR_Dual.fbx
+- Assets/FFTSAssets/Survivors/Railgunner/railgunarcher.fbx
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/texRampCrocoDiseaseDark.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Jump_Dual.fbx
+- Assets/FFTSAssets/Survivors/VoidFiend/meshVoidFiendKnightBody.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeVisorNormals.png
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeVisorEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/Cloaker_Utility.png
@@ -407,19 +414,23 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterGunDiffuse.png
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/Twinkle.png
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/SecondaryAltSkillDef.asset
+- Assets/FFTSAssets/Survivors/Wrecker/Projectiles/mdlDisk.prefab
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/Wrecker_Secondary_Alt1.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@AimPitch_Dual.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/cloaker_emoteskeleton.fbx
 - Assets/FFTSAssets/Survivors/Duke/mdlDuke.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/PassiveSkillDef.asset
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/matDukeDecoy.mat
+- Assets/FFTSAssets/Survivors/Railgunner/matRailGunnerBaseArcher.mat
 - Assets/FFTSAssets/Survivors/Duke/Assets/matDukeMonsoonVisor.mat
+- Assets/FFTSAssets/Survivors/Railgunner/mdlRailgunProtoArcher.asset
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerMarkBackdrop.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Primary.fbx
 - Assets/FFTSAssets/Survivors/Duke/Assets/matDukeGun.mat
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeMonsoonGunEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/FortunesCrosshairsWhisperLock-On.png
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/texRampDecoy.png
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnerGun_Normal.PNG
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Sprint.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/skinCloakerDefaultParams.asset
 - Assets/FFTSAssets/Survivors/Duke/idrsDuke.asset
@@ -447,11 +458,12 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/skinDukeDecoyMonsoon.asset
 - Assets/FFTSAssets/Survivors/Duke/Skills/SalvoSkillDef.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/CloakerSpecialFamily.asset
+- Assets/FFTSAssets/Survivors/VoidFiend/meshVoidFiendKnightHead.asset
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/WreckerPassiveFamily.asset
-- Assets/FFTSAssets/Survivors/Wrecker/WreckerBody.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@RunF_Dual.fbx
 - Assets/FFTSAssets/Survivors/Duke/Skills/FanTheHammerSkillDef.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/Special2SkillDef.asset
+- Assets/FFTSAssets/Survivors/Wrecker/WreckerBody.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/texRampMark.png
 - Assets/FFTSAssets/Survivors/Cloaker/CloakerBody.prefab
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeMonsoonNormal.png
@@ -480,6 +492,7 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/matRicochetTwinkle.mat
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/matDukeDecoyGun.mat
 - Assets/FFTSAssets/Survivors/Wrecker/Animations/GestureMask.mask
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnerMetal_Base_Color.PNG
 - Assets/FFTSAssets/Survivors/Duke/DukeMonsterMaster.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/cloakerShootMask.mask
 - Assets/FFTSAssets/Survivors/Duke/duke_emoteskeleton.fbx
@@ -487,14 +500,17 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/matDukeVisorDecoy.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Special02.fbx
 - Assets/FFTSAssets/Survivors/Duke/Skills/iconDukeUtility2.png
-- Assets/FFTSAssets/Survivors/Wrecker/mdlWrecker.fbx
+- Assets/FFTSAssets/Survivors/Railgunner/matRailGunnekBackpackArcher.mat
 - Assets/FFTSAssets/Survivors/Cloaker/mdlCloaker.fbx
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeSpeedBuff.png
+- Assets/FFTSAssets/Survivors/Wrecker/mdlWrecker.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerRing.mat
 - Assets/FFTSAssets/Survivors/Duke/Skills/DukeUtilitySkillFamily.asset
 - Assets/FFTSAssets/Survivors/Cloaker/UI/CloakerCrosshair.prefab
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeVisorNormalsAlt.png
+- Assets/FFTSAssets/Survivors/Railgunner/mdlRailgunnerArcher.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_01_diffuse.png
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnerGun_Base_Color.PNG
 - Assets/FFTSAssets/Survivors/Duke/dukeicon.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@CharSelect_Idle.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Idle.fbx
@@ -538,8 +554,10 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerMark.mat
 - Assets/FFTSAssets/Survivors/Duke/Assets/skinDukeDefault.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Skill_Utility_Dual.fbx
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnerBase_Base_Color.PNG
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/WreckerPrimaryFamily.asset
 - Assets/FFTSAssets/Survivors/Duke/Animations/DukeEmotes.controller
+- Assets/FFTSAssets/Survivors/VoidFiend/whiteknight1.fbx
 - Assets/FFTSAssets/Survivors/Duke/Assets/skinGrifter.asset
 - Assets/FFTSAssets/Survivors/Duke/DukeBody.prefab
 - Assets/FFTSAssets/Survivors/Duke/Assets/matGrifterBody.mat
@@ -548,11 +566,14 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/nidrsDuke.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeNormals.png
 - Assets/FFTSAssets/Survivors/Duke/bdDukeFreeShot.asset
+- Assets/FFTSAssets/Survivors/Railgunner/mdlRailGunnerBaseArcher.asset
+- Assets/FFTSAssets/Survivors/VoidFiend/matVoidFiendKnight.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/CloakerUtilityFamily.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Skill_Special02_Dual.fbx
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/matDukeChargeIn.mat
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/skinDukeDecoyAlt.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterBodyDiffuse.png
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnerMetal_Normal.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/animCloakerCSS.controller
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/PassiveSkillDef.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/skinDukeAlt.asset
@@ -560,14 +581,14 @@ Assets:
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/Sphere, Unwrapped 1.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Sprint_Dual.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/UI/texCloakerCrosshairDot.png
-- Assets/FFTSAssets/Survivors/Wrecker/Projectiles/Sphere, Unwrapped.asset
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnerBase_Normal.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Skill_Secondary_Idle_Dual.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Special01.fbx
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/DukeDecoyMaster.prefab
 - Assets/FFTSAssets/Survivors/Duke/DukeDecoy/mdlDukeDecoy.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@RunF.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/UI/FortunesCrosshairsWhisper.png
-- Assets/FFTSAssets/Survivors/Wrecker/texWreckerIcon.png
+- Assets/FFTSAssets/Survivors/Wrecker/Projectiles/Sphere, Unwrapped.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@LandImpact.fbx
 - Assets/FFTSAssets/Survivors/Wrecker/texWreckerBuffPlaceholder.png
 - Assets/FFTSAssets/Survivors/Wrecker/Skills/PrimarySkillDef.asset
@@ -575,30 +596,36 @@ Assets:
 - Assets/FFTSAssets/Survivors/Wrecker/texWreckerGunDiffuse.png
 - Assets/FFTSAssets/Survivors/Wrecker/Projectiles/matWreckerRingCore.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@Skill_Secondary_Start.fbx
-- Assets/FFTSAssets/Survivors/Wrecker/Animations/animWreckerEmotes.controller
+- Assets/FFTSAssets/Survivors/Railgunner/mdlRailGunnerMetalArcher.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/CloakerEmotes.controller
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/Cloaker_Special_Unstealthed.png
+- Assets/FFTSAssets/Survivors/Wrecker/Animations/animWreckerEmotes.controller
 - Assets/FFTSAssets/Survivors/Duke/Assets/matDukeMonsoonGun.mat
+- Assets/FFTSAssets/Survivors/Wrecker/texWreckerIcon.png
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/donut8Mesh 1.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/matGrifterGun.mat
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_04_normal.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Dual/Cloaker@Descend_Dual.fbx
 - Assets/FFTSAssets/Survivors/Duke/duke_emoteskeleton.prefab
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/RicochetTracer.prefab
+- Assets/FFTSAssets/Survivors/Railgunner/mdlRailgunBackpackMeshArcher.asset
 - Assets/FFTSAssets/Survivors/Duke/Projectiles/LightningTrail.mat
 - Assets/FFTSAssets/Survivors/Duke/Assets/texGrifterGunEmission.png
 - Assets/FFTSAssets/Survivors/Cloaker/Cloaker_02_normal.png
 - Assets/FFTSAssets/Survivors/Wrecker/WreckerNormalTemp.png
+- Assets/FFTSAssets/Survivors/VoidFiend/mdlVoidFiendKnight.prefab
 - Assets/FFTSAssets/Survivors/Cloaker/matCloakerMark.mat
 - Assets/FFTSAssets/Survivors/Duke/Skills/iconDukeSecondary.png
 - Assets/FFTSAssets/Survivors/Cloaker/Buffs/bdCloakerMarkCd.asset
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/PrimarySkillDef.asset
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnekBackpack_Base_Color.PNG
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@RunBL.fbx
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeDiffuse.png
 - Assets/FFTSAssets/Survivors/Cloaker/Animations/Cloaker@RunL.fbx
 - Assets/FFTSAssets/Survivors/Cloaker/Skills/SecondarySkillDef.asset
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/CloakerMarkedBuffIcon.png
 - Assets/FFTSAssets/Survivors/Cloaker/VFX/matCloakerSuccessfulMark.mat
+- Assets/FFTSAssets/Survivors/Railgunner/RailGunnekBackpack_Normal.PNG
 Dependencies:
 - D:/RoR2Mods/Fortunes-from-the-Scrapyard/FortunesUnityProject/AssetBundles/StandaloneWindows/fftsbase
 - D:/RoR2Mods/Fortunes-from-the-Scrapyard/FortunesUnityProject/AssetBundles/StandaloneWindows/fftsitems

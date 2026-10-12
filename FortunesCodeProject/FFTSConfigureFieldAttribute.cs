@@ -4,6 +4,7 @@ using RiskOfOptions;
 using RiskOfOptions.OptionConfigs;
 using RiskOfOptions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FortunesFromTheScrapyard
@@ -31,6 +32,28 @@ namespace FortunesFromTheScrapyard
 
         protected override void OnConfigured(ConfigFile configFile, object value)
         {
+            if (configFileIdentifier == FFTSConfig.ID_SURVIVORS
+                && (!string.IsNullOrEmpty(configSectionOverride) || !string.IsNullOrEmpty(configNameOverride)))
+            {
+                switch (value)
+                {
+                    case float floatDefault:
+                        MigrateLegacyConfigEntry(configFile, floatDefault);
+                        break;
+                    case int intDefault:
+                        MigrateLegacyConfigEntry(configFile, intDefault);
+                        break;
+                    case bool boolDefault:
+                        MigrateLegacyConfigEntry(configFile, boolDefault);
+                        break;
+                    case string stringDefault:
+                        MigrateLegacyConfigEntry(configFile, stringDefault);
+                        break;
+                    default:
+                        throw new NotSupportedException($"Config migration does not support {value.GetType().Name}.");
+                }
+            }
+
             BaseOption option;
             if (value is bool)
             {
@@ -75,6 +98,46 @@ namespace FortunesFromTheScrapyard
             string guid = separateEntry ? modGUID + "." + fileName : modGUID;
             string name = separateEntry ? modName + " - " + category : modName;
             ModSettingsManager.AddOption(option, guid, name);
+        }
+
+        private void MigrateLegacyConfigEntry<T>(ConfigFile configFile, T defaultValue)
+        {
+            ConfigEntry<T> currentEntry = GetConfigEntry<T>();
+            string legacyKey = MSU.MSUtil.NicifyString(attachedMemberInfo.Name);
+            string survivorName = configSectionOverride.Split(new[] { " - " }, 2, StringSplitOptions.None)[0];
+            string[] legacySections =
+            {
+                MSU.MSUtil.NicifyString(survivorName),
+                MSU.MSUtil.NicifyString(attachedMemberInfo.DeclaringType.Name)
+            };
+
+            bool previousSaveOnConfigSet = configFile.SaveOnConfigSet;
+            bool migrated = false;
+            configFile.SaveOnConfigSet = false;
+            try
+            {
+                foreach (string section in legacySections)
+                {
+                    if (section == currentEntry.Definition.Section && legacyKey == currentEntry.Definition.Key)
+                        continue;
+
+                    ConfigEntry<T> legacyEntry = configFile.Bind(section, legacyKey, defaultValue, string.Empty);
+                    if (EqualityComparer<T>.Default.Equals(currentEntry.Value, defaultValue)
+                        && !EqualityComparer<T>.Default.Equals(legacyEntry.Value, defaultValue))
+                    {
+                        currentEntry.Value = legacyEntry.Value;
+                        migrated = true;
+                    }
+                    configFile.Remove(legacyEntry.Definition);
+                }
+            }
+            finally
+            {
+                configFile.SaveOnConfigSet = previousSaveOnConfigSet;
+            }
+
+            if (migrated)
+                configFile.Save();
         }
     }
 }

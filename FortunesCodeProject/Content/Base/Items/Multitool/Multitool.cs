@@ -33,8 +33,10 @@ namespace FortunesFromTheScrapyard.Items
         public static bool shrineCombat = false;
         [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Includes printers and shops.")]
         public static bool terminals = true;
-        [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Leave one-use Multitool remnants after purchasing drones and gunner turrets. Other summoned minions require Legacy Interactables.")]
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Enable Multitool duplication for purchased drones and gunner turrets. Other summoned minions require Legacy Interactables.")]
         public static bool minions = true;
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, restartRequired = true, configDescOverride = "Leave one-use remnants after purchasing drones and gunner turrets, allowing Multitool to be used on them later. Disabled by default: an active Multitool charge duplicates the drone immediately on purchase instead.")]
+        public static bool droneRemnants = false;
 
 
         //[ConfigureField(FFTSConfig.ID_ITEMS, configDescOverride = "Includes chests and scavenger bags.")]
@@ -294,7 +296,12 @@ namespace FortunesFromTheScrapyard.Items
                 }
 
                 if (purchasedMaster)
-                    MultitoolDroneRemnant.Spawn(droneRemnantPrefab, summon, purchasedMaster);
+                {
+                    if (droneRemnants)
+                        MultitoolDroneRemnant.Spawn(droneRemnantPrefab, summon, purchasedMaster);
+                    else
+                        DuplicatePurchasedDrone(summon, purchasedMaster, activator.GetComponent<CharacterBody>());
+                }
                 return;
             }
 
@@ -314,6 +321,55 @@ namespace FortunesFromTheScrapyard.Items
             }
 
             orig(self, activator);
+        }
+
+        private static void DuplicatePurchasedDrone(SummonMasterBehavior purchase, CharacterMaster purchasedMaster, CharacterBody body)
+        {
+            if (!HasActiveCharge(body))
+                return;
+
+            Vector3 position = purchase.transform.position;
+            RoR2.Navigation.NodeGraph.NodeIndex node = RoR2.Navigation.NodeGraph.NodeIndex.invalid;
+            bool isTurret = purchasedMaster.bodyPrefab.name == "Turret1Body";
+            if (isTurret && !MultitoolDroneRemnant.TryFindTurretPosition(position,
+                MultitoolDroneRemnant.GetPlacementRadius(purchasedMaster), null, out position, out node))
+            {
+                FFTSLog.Warning("Multitool turret duplication needs an unoccupied ground node. No charge was consumed.");
+                return;
+            }
+
+            ItemIndex upgradeItem = ItemCatalog.FindItemIndex("DroneUpgradeHidden");
+            int upgradeCount = upgradeItem != ItemIndex.None ? purchasedMaster.inventory.GetItemCount(upgradeItem) : 0;
+            EquipmentIndex equipmentIndex = purchasedMaster.inventory.GetEquipmentIndex();
+            if (!TryConsumeCharge(body))
+                return;
+
+            CharacterMaster spawnedMaster = null;
+            try
+            {
+                spawnedMaster = new MasterSummon
+                {
+                    masterPrefab = purchase.masterPrefab,
+                    position = position,
+                    rotation = purchase.transform.rotation,
+                    summonerBodyObject = body.gameObject,
+                    ignoreTeamMemberLimit = true,
+                    useAmbientLevel = true,
+                    preSpawnSetupCallback = master => MultitoolDroneRemnant.SetupInventory(master, upgradeCount, equipmentIndex)
+                }.Perform();
+                if (!spawnedMaster)
+                {
+                    FFTSLog.Error("Multitool could not summon the duplicate drone. The charge was refunded.");
+                    return;
+                }
+                if (isTurret)
+                    DirectorCore.instance.AddOccupiedNode(SceneInfo.instance.groundNodes, node);
+            }
+            finally
+            {
+                if (!spawnedMaster)
+                    RefundCharge(body);
+            }
         }
 
         internal static bool HasActiveCharge(CharacterBody body)
