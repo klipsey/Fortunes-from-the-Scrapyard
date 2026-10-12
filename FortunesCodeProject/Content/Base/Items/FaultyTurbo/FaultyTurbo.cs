@@ -32,6 +32,12 @@ namespace FortunesFromTheScrapyard.Items
         [FormatToken(TOKEN, 4)]
         public static float checkInterval = 1f;
 
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0f, 30f)]
+        public static float decayDelay = 3f;
+
+        [FFTSConfigureField(FFTSConfig.ID_ITEMS, 0.05f, 10f)]
+        public static float decayInterval = 0.5f;
+
         internal static NetworkSoundEventDef turboSfx;
         public override void Initialize()
         {
@@ -58,7 +64,9 @@ namespace FortunesFromTheScrapyard.Items
             [ItemDefAssociation]
             public static ItemDef GetItemDef() => FFTSContent.Items.FaultyTurbo;
 
-            private float timer = 0f;
+            private float gainTimer = 0f;
+            private float decayTimer = 0f;
+            private int previousBuffCount = 0;
             public void ModifyStatArguments(StatHookEventArgs args)
             {
                 if (body.HasBuff(FFTSContent.Buffs.bdFaultyTurbo))
@@ -69,32 +77,51 @@ namespace FortunesFromTheScrapyard.Items
 
             private void FixedUpdate()
             {
-                bool atMaxStacks = body.GetBuffCount(FFTSContent.Buffs.bdFaultyTurbo) >= GetStackValue(maxStacks, maxStacksPerStack, stack);
+                float maxBuffCount = GetStackValue(maxStacks, maxStacksPerStack, stack);
+                int buffCount = body.GetBuffCount(FFTSContent.Buffs.bdFaultyTurbo);
 
-                if (base.body.isSprinting && !atMaxStacks)
+                if (buffCount >= maxBuffCount && previousBuffCount < maxBuffCount && body.master?.playerCharacterMasterController?.networkUser?.isLocalPlayer == true)
                 {
-                    timer += Time.fixedDeltaTime;
+                    EffectManager.SimpleSoundEffect(turboSfx.index, body.corePosition, false);
                 }
-                else if (body.HasBuff(FFTSContent.Buffs.bdFaultyTurbo)) timer -= Time.fixedDeltaTime;
+                previousBuffCount = buffCount;
 
-                if (timer >= checkInterval && !atMaxStacks && base.body.isSprinting)
+                if (NetworkServer.active)
                 {
-                    timer = 0f;
-
-                    if (NetworkServer.active)
-                    {
-                        body.AddBuff(FFTSContent.Buffs.bdFaultyTurbo);
-                    }
-
-                    if (body.master?.playerCharacterMasterController?.networkUser?.isLocalPlayer == true)
-                    {
-                        EffectManager.SimpleSoundEffect(turboSfx.index, body.corePosition, false);
-                    }
+                    UpdateStacks(buffCount, maxBuffCount);
                 }
-                else if (timer < 0f && body.HasBuff(FFTSContent.Buffs.bdFaultyTurbo) && !base.body.isSprinting)
+            }
+
+            private void UpdateStacks(int buffCount, float maxBuffCount)
+            {
+                if (body.isSprinting)
                 {
-                    timer = checkInterval / 2f;
+                    gainTimer += Time.fixedDeltaTime;
+                    if (gainTimer >= checkInterval)
+                    {
+                        gainTimer = 0f;
+                        decayTimer = 0f;
+
+                        if (buffCount < maxBuffCount)
+                        {
+                            body.AddBuff(FFTSContent.Buffs.bdFaultyTurbo);
+                        }
+                    }
+                    return;
+                }
+
+                gainTimer = 0f;
+                if (buffCount <= 0)
+                {
+                    decayTimer = 0f;
+                    return;
+                }
+
+                decayTimer += Time.fixedDeltaTime;
+                if (decayTimer >= decayDelay)
+                {
                     body.RemoveBuff(FFTSContent.Buffs.bdFaultyTurbo);
+                    decayTimer = decayDelay - decayInterval;
                 }
             }
             private void OnDisable()
