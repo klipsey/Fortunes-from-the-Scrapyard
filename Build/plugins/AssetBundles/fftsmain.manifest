@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1636087590
+CRC: 2053199161
 Hashes:
   AssetFileHash:
     serializedVersion: 2
     Hash: a37a39190d25004ff0dadd6140bc76e0
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f7988f7769e0f488d93708529316cb95
+    Hash: f0459a33eb5594a79ef4cbec9848e77a
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: a37a39190d25004ff0dadd6140bc76e0
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -17,7 +20,9 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.Addressables
+  ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.Sprite]
 Assets:
 - Assets/FFTSAssets/Main/ScrapyardExpansionDef.asset
 - Assets/FFTSAssets/Main/texFortunesIcon.png

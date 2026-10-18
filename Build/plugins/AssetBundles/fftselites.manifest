@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3388141141
+CRC: 4047113544
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e15c3bc9d2dc25b067ae0847075a169d
+    Hash: 7f08ae9320ece2fc879408c7bf30ed6b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 52a73d9e93e07a203d5e2fdb45475967
+    Hash: 8be2807acf178d74a9dc4cc3ebfaf3e3
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 7f08ae9320ece2fc879408c7bf30ed6b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -26,11 +29,11 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
-- Class: 114
   Script: {fileID: 871971028, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 418323186c6d3bf4aa9fab1aa65bef7c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 40ba68378cc299341bc9f8594fd6d6f9, type: 3}
 - Class: 114
@@ -88,6 +91,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[RoR2.ItemDisplayRuleSet]
 - AssemblyName: Unity.Addressables
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.GameObject]
+- AssemblyName: Unity.Addressables
+  ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.Sprite]
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule

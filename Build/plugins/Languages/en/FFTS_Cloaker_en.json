@@ -20,7 +20,7 @@
     "FFTS_CLOAKER_PRIMARY_DESCRIPTION": "Fire a precise bullet for <style=cIsDamage>{0}% damage</style>.",
 
     "FFTS_CLOAKER_SECONDARY_NAME": "Shoot Harder",
-    "FFTS_CLOAKER_SECONDARY_DESCRIPTION": "Charge a shot for up to <style=cIsDamage>{0}% damage</style>. Charging takes <style=cIsUtility>{1} seconds</style>.",
+    "FFTS_CLOAKER_SECONDARY_DESCRIPTION": "Charge a shot for up to <style=cIsDamage>{0}% damage</style>.</style>.",
 
     "FFTS_CLOAKER_UTILITY_NAME": "Restealth",
     "FFTS_CLOAKER_UTILITY_DESCRIPTION": "Dash in your movement direction. With Cloak, enter stealth. With Akimbo, gain <style=cIsDamage>{2}% attack speed</style> for <style=cIsUtility>{3} seconds</style>.",

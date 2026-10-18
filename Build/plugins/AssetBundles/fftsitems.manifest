@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 708894346
+CRC: 2926860756
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d36095704a04866e0822266329d0cfc8
+    Hash: d914b483a6b43ec8635011d3f66dad65
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6faf8452b41002858b03d58c82bb14dc
+    Hash: 7ac4aa47781f61de34929dcc2254d21b
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: d914b483a6b43ec8635011d3f66dad65
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -40,21 +43,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 1132406345, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
-  Script: {fileID: 678291247, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-- Class: 114
   Script: {fileID: 1985007777, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-- Class: 114
-  Script: {fileID: 831147854, guid: b1595d7707f65be48af3202912a6f2cd, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
 - Class: 114
   Script: {fileID: 1783796254, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: 511512695, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
-  Script: {fileID: 816898038, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  Script: {fileID: 678291247, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
-  Script: {fileID: 1790887305, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f727041e2de4c654eb149643cbe8e537, type: 3}
 - Class: 114
@@ -82,6 +79,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: -1848696948, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
+  Script: {fileID: 1790887305, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+- Class: 114
   Script: {fileID: -317677761, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
   Script: {fileID: -270136354, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
@@ -92,7 +91,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: -1895344032, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
 - Class: 114
+  Script: {fileID: 816898038, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+- Class: 114
   Script: {fileID: 1093960770, guid: b1595d7707f65be48af3202912a6f2cd, type: 3}
+- Class: 114
+  Script: {fileID: 831147854, guid: b1595d7707f65be48af3202912a6f2cd, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -122,12 +125,18 @@ SerializeReferenceClassIdentifiers:
   ClassName: RoR2.CharacterModel/RendererInfo
 - AssemblyName: RoR2
   ClassName: RoR2.DamageTypeCombo
+- AssemblyName: RoR2
+  ClassName: RoR2.VFXAttributes/VFXIntensity
+- AssemblyName: RoR2
+  ClassName: RoR2.VFXAttributes/VFXPriority
 - AssemblyName: Unity.Addressables
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[RoR2.ItemDisplayRuleSet]
 - AssemblyName: Unity.Addressables
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.GameObject]
 - AssemblyName: Unity.Addressables
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.Material]
+- AssemblyName: Unity.Addressables
+  ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.Sprite]
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule

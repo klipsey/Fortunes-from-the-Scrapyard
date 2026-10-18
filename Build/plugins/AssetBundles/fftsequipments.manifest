@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3075629103
+CRC: 648588094
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b87c3d2fd1f3937403978a00c6ba114b
+    Hash: b659ef8e4e1734b6572eace7fcf2e283
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b569bc089341147858024f6d78f8552c
+    Hash: 2749e5ab5e77a99b7e45048879633ea0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: b659ef8e4e1734b6572eace7fcf2e283
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,6 +61,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[RoR2.ItemDisplayRuleSet]
 - AssemblyName: Unity.Addressables
   ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.GameObject]
+- AssemblyName: Unity.Addressables
+  ClassName: UnityEngine.AddressableAssets.AssetReferenceT`1[UnityEngine.Sprite]
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule

@@ -75,17 +75,17 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="R2API" Version="5.0.5" />
-		<PackageReference Include="R2API.Addressables" Version="1.0.4" />
-		<PackageReference Include="R2API.Animations" Version="1.1.1" />
-		<PackageReference Include="R2API.Elites" Version="1.0.7" />
-		<PackageReference Include="R2API.Execute" Version="1.1.1" />
-		<PackageReference Include="R2API.Items" Version="1.0.7" />
-		<PackageReference Include="R2API.Skills" Version="1.0.2" />
+		<PackageReference Include="R2API.Addressables" Version="1.1.3" />
+		<PackageReference Include="R2API.Animations" Version="1.2.5" />
+		<PackageReference Include="R2API.Elites" Version="1.1.3" />
+		<PackageReference Include="R2API.Execute" Version="1.1.3" />
+		<PackageReference Include="R2API.Items" Version="1.0.8" />
+		<PackageReference Include="R2API.Skills" Version="1.0.6" />
 		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.5.0-r.1" />
 		<PackageReference Include="MMHOOK.RoR2" Version="2026.10.8" />
 		<PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
 		<PackageReference Include="R2API.Prefab" Version="1.*" />
-		<PackageReference Include="R2API.RecalculateStats" Version="1.6.0" />
+		<PackageReference Include="R2API.RecalculateStats" Version="1.6.6" />
 		<PackageReference Include="R2API.Sound" Version="1.*" />
 		<PackageReference Include="R2API.ProcType" Version="1.*" />
 	</ItemGroup>
