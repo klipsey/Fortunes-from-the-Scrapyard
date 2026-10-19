@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1967851395
+CRC: 2126889954
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: aa264a8b003e3394622ad4c1b1d3c03b
+    Hash: d40dfca809e3d566fa0d49c35416b619
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b5f1f8320bb997c8561f8deaff1a71bc
+    Hash: 62033d02f9fefb1060ee2b437f4532bb
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: aa264a8b003e3394622ad4c1b1d3c03b
+    Hash: d40dfca809e3d566fa0d49c35416b619
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -210,8 +210,6 @@ ClassTypes:
   Script: {fileID: 1030275901, guid: b1595d7707f65be48af3202912a6f2cd, type: 3}
 - Class: 114
   Script: {fileID: -793381914, guid: b1595d7707f65be48af3202912a6f2cd, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 4f4f59b83057a85408a1cb4718ca9004, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 120
@@ -245,10 +243,6 @@ SerializeReferenceClassIdentifiers:
   ClassName: HG.SerializableSystemType
 - AssemblyName: MSU.Runtime
   ClassName: MSU.AchievableUnlockableDef/PreRequisiteAchievementIdentifier
-- AssemblyName: MSU.Runtime
-  ClassName: MSU.NamedItemDisplayRuleSet/DisplayRule
-- AssemblyName: MSU.Runtime
-  ClassName: MSU.NamedItemDisplayRuleSet/RuleGroup
 - AssemblyName: RoR2
   ClassName: ChildLocator/NameTransformPair
 - AssemblyName: RoR2
@@ -572,7 +566,6 @@ Assets:
 - Assets/FFTSAssets/Survivors/Duke/Assets/matGrifterBody.mat
 - Assets/FFTSAssets/Survivors/Wrecker/WreckerDiffuse.png
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeVisorEmissionAlt.png
-- Assets/FFTSAssets/Survivors/Duke/nidrsDuke.asset
 - Assets/FFTSAssets/Survivors/Duke/Assets/texDukeNormals.png
 - Assets/FFTSAssets/Survivors/Duke/bdDukeFreeShot.asset
 - Assets/FFTSAssets/Survivors/Railgunner/mdlRailGunnerBaseArcher.asset

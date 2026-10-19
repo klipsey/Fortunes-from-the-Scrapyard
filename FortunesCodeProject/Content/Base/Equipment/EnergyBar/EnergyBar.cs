@@ -33,6 +33,7 @@ namespace FortunesFromTheScrapyard.Equipments
                     body.outOfDangerStopwatch = 7f;
                     body.outOfDanger = true;
                     body.healthComponent.ForceShieldRegen();
+                    EffectManager.SimpleSoundEffect(FFTSContent.NetworkSoundEventDefs.nsedEnergyBar.index, body.corePosition, true);
                 }
                 return true;
             }

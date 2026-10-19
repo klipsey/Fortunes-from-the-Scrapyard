@@ -202,11 +202,13 @@ namespace FortunesFromTheScrapyard
             }
 
             //We can swap shaders in parallel
-            ParallelMultiStartCoroutine multiStartCoroutine = new ParallelMultiStartCoroutine();
-            multiStartCoroutine.Add(SwapShaders);
-            multiStartCoroutine.Add(SwapAddressableShaders);
+            ParallelCoroutine parallelCoroutine = ParallelCoroutine.RequestFromPool();
+            parallelCoroutine.Add(SwapShaders());
+            parallelCoroutine.Add(SwapAddressableShaders());
 
-            while (!multiStartCoroutine.isDone) yield return null;
+            while (!parallelCoroutine.isDone) yield return null;
+
+            ParallelCoroutine.ReturnToPool(parallelCoroutine);
 
             _onExampleAssetsInitialized?.Invoke();
             yield break;
@@ -216,7 +218,7 @@ namespace FortunesFromTheScrapyard
         //look at the method "LoadFromPath", that one contains stuff you should be interested in modifying in the future.
         private static IEnumerator LoadAssetBundles()
         {
-            ParallelMultiStartCoroutine helper = new ParallelMultiStartCoroutine();
+            ParallelCoroutine helper = ParallelCoroutine.RequestFromPool();
 
             List<(string path, FFTSBundle bundleEnum, AssetBundle loadedBundle)> pathsAndBundles = new List<(string path, FFTSBundle bundleEnum, AssetBundle loadedBundle)>();
 
@@ -224,12 +226,13 @@ namespace FortunesFromTheScrapyard
             for (int i = 0; i < paths.Length; i++)
             {
                 string path = paths[i];
-                helper.Add(LoadFromPath, pathsAndBundles, path, i, paths.Length);
+                helper.Add(LoadFromPath(pathsAndBundles, path, i, paths.Length));
             }
 
-            helper.Start();
-            while (!helper.IsDone())
+            while (!helper.isDone)
                 yield return null;
+
+            ParallelCoroutine.ReturnToPool(helper);
 
             foreach ((string path, FFTSBundle bundleEnum, AssetBundle assetBundle) in pathsAndBundles)
             {

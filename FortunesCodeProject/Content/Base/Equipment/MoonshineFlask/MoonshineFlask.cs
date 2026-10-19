@@ -47,6 +47,7 @@ namespace FortunesFromTheScrapyard.Equipments
                 if (NetworkServer.active)
                 {
                     body.AddTimedBuff(FFTSContent.Buffs.bdMoonshineFlask, buffDuration);
+                    EffectManager.SimpleSoundEffect(FFTSContent.NetworkSoundEventDefs.nsedMoonshineUse.index, body.corePosition, true);
                 }
                 return true;
             }
@@ -106,7 +107,7 @@ namespace FortunesFromTheScrapyard.Equipments
                     {
                         origin = damageInfo.position,
                         rotation = Util.QuaternionSafeLookRotation((damageInfo.force != Vector3.zero) ? damageInfo.force : UnityEngine.Random.onUnitSphere)
-                    }, effectPrefab: missEffect, transmit: false);
+                    }, effectPrefab: missEffect, transmit: true);
 
                     damageInfo.rejected = true;
 

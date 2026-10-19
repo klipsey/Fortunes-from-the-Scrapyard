@@ -57,17 +57,19 @@ namespace FortunesFromTheScrapyard.Items
 
             private void FixedUpdate()
             {
+                if (!NetworkServer.active) return;
+
                 if (body.healthComponent.health <= body.healthComponent.fullCombinedHealth * healthThreshold)
                 {
                     if (!body.HasBuff(FFTSContent.Buffs.bdDuctTape))
                     {
-                        if (NetworkServer.active) body.AddBuff(FFTSContent.Buffs.bdDuctTape);
-                        Util.PlaySound("sfx_ducttape_active", base.gameObject);
+                        body.AddBuff(FFTSContent.Buffs.bdDuctTape);
+                        EffectManager.SimpleSoundEffect(FFTSContent.NetworkSoundEventDefs.nsedDuctTapeActive.index, body.corePosition, true);
                     }
                 }
                 else if (body.HasBuff(FFTSContent.Buffs.bdDuctTape))
                 {
-                    if (NetworkServer.active) body.RemoveBuff(FFTSContent.Buffs.bdDuctTape);
+                    body.RemoveBuff(FFTSContent.Buffs.bdDuctTape);
                 }
             }
         }

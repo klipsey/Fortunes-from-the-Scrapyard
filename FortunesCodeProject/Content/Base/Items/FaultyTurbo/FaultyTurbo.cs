@@ -66,7 +66,6 @@ namespace FortunesFromTheScrapyard.Items
 
             private float gainTimer = 0f;
             private float decayTimer = 0f;
-            private int previousBuffCount = 0;
             public void ModifyStatArguments(StatHookEventArgs args)
             {
                 if (body.HasBuff(FFTSContent.Buffs.bdFaultyTurbo))
@@ -77,18 +76,9 @@ namespace FortunesFromTheScrapyard.Items
 
             private void FixedUpdate()
             {
-                float maxBuffCount = GetStackValue(maxStacks, maxStacksPerStack, stack);
-                int buffCount = body.GetBuffCount(FFTSContent.Buffs.bdFaultyTurbo);
-
-                if (buffCount >= maxBuffCount && previousBuffCount < maxBuffCount && body.master?.playerCharacterMasterController?.networkUser?.isLocalPlayer == true)
-                {
-                    EffectManager.SimpleSoundEffect(turboSfx.index, body.corePosition, false);
-                }
-                previousBuffCount = buffCount;
-
                 if (NetworkServer.active)
                 {
-                    UpdateStacks(buffCount, maxBuffCount);
+                    UpdateStacks(body.GetBuffCount(FFTSContent.Buffs.bdFaultyTurbo), GetStackValue(maxStacks, maxStacksPerStack, stack));
                 }
             }
 
@@ -105,6 +95,10 @@ namespace FortunesFromTheScrapyard.Items
                         if (buffCount < maxBuffCount)
                         {
                             body.AddBuff(FFTSContent.Buffs.bdFaultyTurbo);
+                            if (buffCount + 1 >= maxBuffCount)
+                            {
+                                EffectManager.SimpleSoundEffect(turboSfx.index, body.corePosition, true);
+                            }
                         }
                     }
                     return;

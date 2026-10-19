@@ -74,9 +74,9 @@ namespace FortunesFromTheScrapyard
             private const float swipeEnd = 0.6f;
             private Animator animator;
             private ItemDisplay itemDisplay;
-            private Transform rightClaw;
-            private Transform leftClaw;
-            private Transform swingClaw;
+            private Transform swingMuzzle1;
+            private Transform swingMuzzle2;
+            private Transform swingMuzzle;
             private GameObject swingEffect;
             private int layerIndex;
             private int swingStateHash;
@@ -88,24 +88,25 @@ namespace FortunesFromTheScrapyard
                 animator = GetComponent<Animator>();
                 itemDisplay = GetComponentInParent<ItemDisplay>();
                 layerIndex = animator.GetLayerIndex("Body");
-                foreach (Transform child in GetComponentsInChildren<Transform>())
+                ChildLocator childLocator = GetComponent<ChildLocator>();
+                if (childLocator)
                 {
-                    if (child.name == "DEF-hand.R.002") rightClaw = child;
-                    if (child.name == "DEF-hand.L.002") leftClaw = child;
+                    swingMuzzle1 = childLocator.FindChild("Swing1");
+                    swingMuzzle2 = childLocator.FindChild("Swing2");
                 }
 
-                if (!rightClaw || !leftClaw)
-                    FFTSLog.Error("Rough Reception display is missing its animated claw bones.");
+                if (!swingMuzzle1 || !swingMuzzle2)
+                    FFTSLog.Error("Rough Reception display is missing its Swing1/Swing2 muzzles.");
             }
 
             public void PlaySwing(float duration, int step)
             {
                 ClearEffect();
                 swingDuration = duration;
-                swingClaw = step == 0 ? rightClaw : leftClaw;
+                swingMuzzle = step == 0 ? swingMuzzle1 : swingMuzzle2;
                 string stateName = "Swing" + (step + 1);
                 swingStateHash = Animator.StringToHash(stateName);
-                awaitingSwipe = swingClaw;
+                awaitingSwipe = swingMuzzle;
                 EntityState.PlayAnimationOnAnimator(animator, "Body", stateName, "Swing.playbackRate", duration);
             }
 
@@ -123,7 +124,7 @@ namespace FortunesFromTheScrapyard
                 if (awaitingSwipe && state.normalizedTime >= swipeStart)
                 {
                     awaitingSwipe = false;
-                    swingEffect = Instantiate(roughSwingPrefab, swingClaw);
+                    swingEffect = Instantiate(roughSwingPrefab, swingMuzzle);
                     swingEffect.transform.localPosition = Vector3.zero;
                     swingEffect.transform.localRotation = Quaternion.identity;
                     swingEffect.transform.localScale = Vector3.one * 0.75f;

@@ -18,9 +18,9 @@ namespace FortunesFromTheScrapyard
         public static ReadOnlyContentPack readOnlyContentPack => new ReadOnlyContentPack(fftsContentPack);
         internal static ContentPack fftsContentPack { get; } = new ContentPack();
 
-        internal static ParallelMultiStartCoroutine _parallelPreLoadDispatchers = new ParallelMultiStartCoroutine();
+        internal static ParallelCoroutine _parallelPreLoadDispatchers = ParallelCoroutine.RequestFromPool();
         private static Func<IEnumerator>[] _loadDispatchers;
-        internal static ParallelMultiStartCoroutine _parallelPostLoadDispatchers = new ParallelMultiStartCoroutine();
+        internal static ParallelCoroutine _parallelPostLoadDispatchers = ParallelCoroutine.RequestFromPool();
 
         private static Action[] _fieldAssignDispatchers;
 
@@ -30,8 +30,7 @@ namespace FortunesFromTheScrapyard
             while (enumerator.MoveNext())
                 yield return null;
 
-            _parallelPreLoadDispatchers.Start();
-            while (!_parallelPreLoadDispatchers.IsDone()) yield return null;
+            while (!_parallelPreLoadDispatchers.isDone) yield return null;
 
             for (int i = 0; i < _loadDispatchers.Length; i++)
             {
@@ -41,7 +40,6 @@ namespace FortunesFromTheScrapyard
                 while (enumerator?.MoveNext() ?? false) yield return null;
             }
 
-            _parallelPostLoadDispatchers.Start();
             while (!_parallelPostLoadDispatchers.isDone) yield return null;
 
             for (int i = 0; i < _fieldAssignDispatchers.Length; i++)
@@ -90,10 +88,11 @@ namespace FortunesFromTheScrapyard
             */
 
             FFTSLog.Info($"Calling AsyncAssetLoad Attribute Methods...");
-            ParallelMultiStartCoroutine asyncAssetLoadCoroutines = AsyncAssetLoadAttribute.CreateCoroutineForMod(FFTSMain.instance);
-            asyncAssetLoadCoroutines.Start();
+            ParallelCoroutine asyncAssetLoadCoroutines = AsyncAssetLoadAttribute.CreateParallelCoroutineForMod(FFTSMain.instance);
             while (!asyncAssetLoadCoroutines.isDone)
                 yield return null;
+
+            ParallelCoroutine.ReturnToPool(asyncAssetLoadCoroutines);
         }
 
         private static IEnumerator LoadItemDisplayDictionaries()
@@ -132,7 +131,7 @@ namespace FortunesFromTheScrapyard
 
         private static IEnumerator LoadVanillaSurvivorBundles()
         {
-            ParallelMultiStartCoroutine helper = new ParallelMultiStartCoroutine();
+            ParallelCoroutine helper = ParallelCoroutine.RequestFromPool();
 
             var list = new List<FFTSVanillaSurvivor>()
             {
@@ -141,14 +140,15 @@ namespace FortunesFromTheScrapyard
 
             foreach (var survivor in list)
             {
-                helper.Add(survivor.LoadContentAsync);
+                helper.Add(survivor.LoadContentAsync());
             }
 
-            helper.Start();
-            while (!helper.IsDone())
+            while (!helper.isDone)
             {
                 yield return null;
             }
+
+            ParallelCoroutine.ReturnToPool(helper);
 
             foreach (var survivor in list)
             {
@@ -171,7 +171,7 @@ namespace FortunesFromTheScrapyard
             ContentManager.collectContentPackProviders += AddSelf;
             FFTSAssets.onScrapyardAssetsInitialized += () =>
             {
-                _parallelPreLoadDispatchers.Add(AddExpansionDef);
+                _parallelPreLoadDispatchers.Add(AddExpansionDef());
             };
         }
 
@@ -203,12 +203,12 @@ namespace FortunesFromTheScrapyard
 
             _fieldAssignDispatchers = new Action[]
             {
-                () => ContentUtil.PopulateTypeFields(typeof(Items), fftsContentPack.itemDefs),
-                () => ContentUtil.PopulateTypeFields(typeof(Equipments), fftsContentPack.equipmentDefs),
-                () => ContentUtil.PopulateTypeFields(typeof(Buffs), fftsContentPack.buffDefs),
-                () => ContentUtil.PopulateTypeFields(typeof(Survivors), fftsContentPack.survivorDefs),
-                () => ContentUtil.PopulateTypeFields(typeof(NetworkedBodyAttachments), fftsContentPack.networkedObjectPrefabs),
-                () => ContentUtil.PopulateTypeFields(typeof(NetworkSoundEventDefs), fftsContentPack.networkSoundEventDefs),
+                () => ContentLoadHelper.PopulateTypeFields(typeof(Items), fftsContentPack.itemDefs),
+                () => ContentLoadHelper.PopulateTypeFields(typeof(Equipments), fftsContentPack.equipmentDefs),
+                () => ContentLoadHelper.PopulateTypeFields(typeof(Buffs), fftsContentPack.buffDefs),
+                () => ContentLoadHelper.PopulateTypeFields(typeof(Survivors), fftsContentPack.survivorDefs),
+                () => ContentLoadHelper.PopulateTypeFields(typeof(NetworkedBodyAttachments), fftsContentPack.networkedObjectPrefabs),
+                () => ContentLoadHelper.PopulateTypeFields(typeof(NetworkSoundEventDefs), fftsContentPack.networkSoundEventDefs),
             };
         }
         public static class NetworkSoundEventDefs

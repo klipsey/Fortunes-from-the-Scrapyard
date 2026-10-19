@@ -21,9 +21,10 @@ MonoBehaviour:
   healthBoostCoefficient: 4
   damageBoostCoefficient: 1
   devotionLevel: 0
-  eliteTier: 1
+  vanillaEliteTier: 1
   eliteRamp: {fileID: 2800000, guid: 0e901df432ea86741a6db5f369a8edd7, type: 3}
   overlayMaterial: {fileID: 2100000, guid: cd7a25a125bfb204a8a0ae2acdb74c6e, type: 2}
   applyLightColorOverrides: 0
   particleReplacementMaterial: {fileID: 0}
   effect: {fileID: 0}
+  eliteTier: 0

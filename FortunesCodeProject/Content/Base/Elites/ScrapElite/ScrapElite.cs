@@ -33,9 +33,23 @@ namespace FortunesFromTheScrapyard.Elite
         public static GameObject ScrapLaser;
 
         public static Xoroshiro128Plus syntheticRng;
+        private static readonly List<EliteDef> fullTier1EliteDefs = new List<EliteDef>();
+
         public override bool Execute(EquipmentSlot slot)
         {
             return false;
+        }
+
+        [SystemInitializer(typeof(CombatDirector))]
+        private static void AddEliteDefsToFullTier1()
+        {
+            CombatDirector.EliteTierDef fullTier1 = EliteAPI.GetVanillaEliteTierDef(VanillaEliteTier.FullTier1);
+
+            foreach (EliteDef eliteDef in fullTier1EliteDefs)
+            {
+                if (Array.IndexOf(fullTier1.eliteTypes, eliteDef) < 0)
+                    HG.ArrayUtils.ArrayAppend(ref fullTier1.eliteTypes, eliteDef);
+            }
         }
 
         public override void Initialize()
@@ -44,6 +58,8 @@ namespace FortunesFromTheScrapyard.Elite
             {
                 if (!(eliteDef is ExtendedEliteDef extendedElite) || !extendedElite.overlayMaterial)
                     throw new InvalidOperationException("Scrap elite requires an ExtendedEliteDef with a hologram overlay material.");
+                if (extendedElite.vanillaEliteTier == ExtendedEliteDef.VanillaEliteTierEntry.Tier1)
+                    fullTier1EliteDefs.Add(extendedElite);
                 if (!extendedElite.eliteRamp)
                     throw new InvalidOperationException("Scrap elite requires a color ramp for its hologram overlay.");
                 Material overlay = extendedElite.overlayMaterial;

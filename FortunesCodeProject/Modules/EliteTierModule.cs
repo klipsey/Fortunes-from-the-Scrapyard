@@ -47,19 +47,20 @@ namespace FortunesFromTheScrapyard
 
             List<IContentPiece<SerializableEliteTierDef>> eliteTiers = new List<IContentPiece<SerializableEliteTierDef>>();
 
-            var helper = new ParallelMultiStartCoroutine();
+            var helper = ParallelCoroutine.RequestFromPool();
             foreach (var eliteTier in content)
             {
                 if (!eliteTier.IsAvailable(_contentPieceProvider.contentPack))
                     continue;
 
                 eliteTiers.Add(eliteTier);
-                helper.Add(eliteTier.LoadContentAsync);
+                helper.Add(eliteTier.LoadContentAsync());
             }
 
-            helper.Start();
             while (!helper.isDone)
                 yield return null;
+
+            ParallelCoroutine.ReturnToPool(helper);
 
             InitializeEliteTiers(eliteTiers);
         }

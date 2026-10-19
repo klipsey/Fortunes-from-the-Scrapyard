@@ -25,9 +25,17 @@ namespace FortunesFromTheScrapyard.Items
         public static bool recordEnabled = true;
 
         public static GameObject RecordEffect;
+
+        private static NetworkSoundEventDef recordSfx1;
+        private static NetworkSoundEventDef recordSfx2;
+        private static NetworkSoundEventDef recordSfx3;
         public override void Initialize()
         {
             RecordEffect = assetCollection.FindAsset<GameObject>("RecordEffect");
+
+            recordSfx1 = FFTSContent.CreateAndAddNetworkSoundEventDef("sfx_cd_1");
+            recordSfx2 = FFTSContent.CreateAndAddNetworkSoundEventDef("sfx_cd_2");
+            recordSfx3 = FFTSContent.CreateAndAddNetworkSoundEventDef("sfx_cd_3");
 
             On.RoR2.GenericSkill.OnExecute += GenericSkill_OnExecute;
         }
@@ -64,27 +72,32 @@ namespace FortunesFromTheScrapyard.Items
                             {
                                 case 0:
                                     {
-                                        Util.PlaySound("sfx_cd_1", skillSlot.gameObject);
+                                        PlayRecordSound(recordSfx1, skillSlot.characterBody);
                                         break;
                                     }
                                 case 1:
                                     {
-                                        Util.PlaySound("sfx_cd_2", skillSlot.gameObject);
+                                        PlayRecordSound(recordSfx2, skillSlot.characterBody);
                                         break;
                                     }
                             }
                         }
                         else
                         {
-                            if (skillSlot == secondary) Util.PlaySound("sfx_cd_1", skillSlot.gameObject);
-                            if (skillSlot == utility) Util.PlaySound("sfx_cd_2", skillSlot.gameObject);
-                            if (skillSlot == special) Util.PlaySound("sfx_cd_3", skillSlot.gameObject);
+                            if (skillSlot == secondary) PlayRecordSound(recordSfx1, skillSlot.characterBody);
+                            if (skillSlot == utility) PlayRecordSound(recordSfx2, skillSlot.characterBody);
+                            if (skillSlot == special) PlayRecordSound(recordSfx3, skillSlot.characterBody);
                         }
                     }
 
                     EffectManager.SimpleImpactEffect(RecordEffect, skillSlot.characterBody.corePosition, Vector3.up, transmit: true);
                 }
             }
+        }
+
+        private static void PlayRecordSound(NetworkSoundEventDef sound, CharacterBody body)
+        {
+            EffectManager.SimpleSoundEffect(sound.index, body.corePosition, true);
         }
 
         public override void ModifyContentPack(ContentPack contentPack)
