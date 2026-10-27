@@ -18,6 +18,12 @@
     <Compile Remove="Content\InDev\Survivors\Wrecker\**" />
     <EmbeddedResource Remove="Content\InDev\Survivors\Wrecker\**" />
     <None Remove="Content\InDev\Survivors\Wrecker\**" />
+    <Compile Remove="Content\InDev\Monsters\**" />
+    <EmbeddedResource Remove="Content\InDev\Monsters\**" />
+    <None Remove="Content\InDev\Monsters\**" />
+    <Compile Remove="Content\InDev\Items\Polypore\**" />
+    <EmbeddedResource Remove="Content\InDev\Items\Polypore\**" />
+    <None Remove="Content\InDev\Items\Polypore\**" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

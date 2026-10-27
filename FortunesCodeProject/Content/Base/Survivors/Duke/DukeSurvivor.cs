@@ -30,7 +30,7 @@ namespace FortunesFromTheScrapyard.Survivors.Duke
         public const string CLONETOKEN = "FFTS_DUKE_CLONE_DESC";
 
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, restartRequired = true, configDescOverride = "Enable the Duke survivor. Requires a restart.", configSectionOverride = "Duke", configNameOverride = "Enable Duke")]
-        public static bool enableDuke = false;
+        public static bool enableDuke = true;
 
         [FFTSConfigureField(FFTSConfig.ID_SURVIVORS, 0f, 20f, restartRequired = true, configSectionOverride = "Duke - Salvo", configNameOverride = "Damage Coefficient")]
         [FormatToken(SALVOTOKEN, FormatTokenAttribute.OperationTypeEnum.MultiplyByN, 100, 0)]

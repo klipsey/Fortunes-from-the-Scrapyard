@@ -32,38 +32,31 @@ namespace FortunesFromTheScrapyard
                 yield break;
 
             string[] names = { "mdlVoidSurvivorBody", "mdlVoidSurvivorHead", "mdlVoidSurvivorMetal", "metalcollar.001" };
+            // Body and head are the armor shell; Metal and collar host the inside crack meshes so only they receive overlays like corruption.
             var sources = request.asset.GetComponentsInChildren<MeshRenderer>();
-            if (sources.Length != 2)
-                throw new InvalidOperationException("Void Fiend's White Knight skin requires body and head meshes.");
+            if (sources.Length != names.Length)
+                throw new InvalidOperationException("Void Fiend's White Knight skin requires armor and inside meshes for the body and head.");
             var parameters = ScriptableObject.CreateInstance<SkinDefParams>();
             parameters.name = "skinVoidFiendKnightParams";
-            parameters.rendererInfos = new CharacterModel.RendererInfo[2];
+            parameters.rendererInfos = new CharacterModel.RendererInfo[names.Length];
             parameters.meshReplacements = new SkinDefParams.MeshReplacement[names.Length];
             for (int i = 0; i < names.Length; i++)
             {
                 var transform = model.transform.Find(names[i]);
                 if (!transform || !transform.TryGetComponent(out SkinnedMeshRenderer target))
                     throw new InvalidOperationException("Void Fiend's White Knight skin cannot find renderer " + names[i] + ".");
-                Mesh mesh;
-                if (i < 2)
+                var source = sources.SingleOrDefault(renderer => renderer.name == names[i]);
+                if (!source || !source.TryGetComponent(out MeshFilter filter) || !filter.sharedMesh
+                    || !source.sharedMaterial || filter.sharedMesh.bindposes.Length != target.bones.Length)
+                    throw new InvalidOperationException("Void Fiend's White Knight skin has invalid mesh or material data for " + names[i] + ".");
+                parameters.rendererInfos[i] = new CharacterModel.RendererInfo
                 {
-                    var source = sources.SingleOrDefault(renderer => renderer.name == names[i]);
-                    if (!source || !source.TryGetComponent(out MeshFilter filter) || !filter.sharedMesh
-                        || !source.sharedMaterial || filter.sharedMesh.bindposes.Length != target.bones.Length)
-                        throw new InvalidOperationException("Void Fiend's White Knight skin has invalid mesh or material data for " + names[i] + ".");
-                    mesh = filter.sharedMesh;
-                    parameters.rendererInfos[i] = new CharacterModel.RendererInfo
-                    {
-                        renderer = target,
-                        defaultMaterial = source.sharedMaterial,
-                        defaultShadowCastingMode = ShadowCastingMode.On
-                    };
-                }
-                else
-                {
-                    mesh = new Mesh { name = names[i] + "KnightHidden" };
-                }
-                parameters.meshReplacements[i] = new SkinDefParams.MeshReplacement { renderer = target, mesh = mesh };
+                    renderer = target,
+                    defaultMaterial = source.sharedMaterial,
+                    defaultShadowCastingMode = ShadowCastingMode.On,
+                    ignoreOverlays = i < 2
+                };
+                parameters.meshReplacements[i] = new SkinDefParams.MeshReplacement { renderer = target, mesh = filter.sharedMesh };
             }
 
             var icon = Skins.CreateSkinIcon(new Color32(0xE1, 0xE1, 0xDD, 0xFF),
